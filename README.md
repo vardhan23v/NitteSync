@@ -54,6 +54,12 @@ NitteSync/
 
 Layers: **XHTML page → backing bean → service → DAO → JDBC → MySQL**.
 
+The user interface follows the design direction recorded in
+[`docs/design.md`](docs/design.md): the *Citrus* theme (tangerine action on warm
+off-white, aubergine ink), with the palette, type scale, spacing, radii, shadows
+and motion tokens defined once in `src/main/webapp/resources/css/style.css`.
+Components use those tokens only, and the palette is contrast-checked.
+
 ---
 
 ## 3. Set up MySQL (macOS)

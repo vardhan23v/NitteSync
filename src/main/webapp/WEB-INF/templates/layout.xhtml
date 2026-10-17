@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      lang="en">
 
 <!--
   The page template.
@@ -13,7 +14,17 @@
 -->
 <h:head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>NitteSync</title>
+
+    <!-- Citrus theme fonts. The font tokens in style.css carry system fallbacks,
+         so the app still renders correctly on a machine with no network. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@600;700&amp;family=Red+Hat+Text:wght@400;600&amp;display=swap"/>
+
+    <link rel="icon" type="image/png" href="#{request.contextPath}/resources/img/favicon.png"/>
     <h:outputStylesheet name="css/style.css"/>
 </h:head>
 

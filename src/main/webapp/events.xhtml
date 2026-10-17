@@ -18,7 +18,7 @@
         <div class="cards">
             <ui:repeat value="#{eventListBean.events}" var="event">
                 <div class="card">
-                    <h3>#{event.title}</h3>
+                    <h2>#{event.title}</h2>
                     <p class="muted">
                         <h:outputText value="#{event.eventDate}">
                             <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>

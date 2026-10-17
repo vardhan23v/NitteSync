@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="jakarta.faces.passthrough">
 
 <!-- Administrator overview: every event and every registration. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
@@ -16,6 +17,7 @@
 
         <h:dataTable value="#{adminEventsBean.allEvents}" var="event"
                      styleClass="table" headerClass="table-header" rowClasses="table-row"
+                     p:tabindex="0"
                      rendered="#{not empty adminEventsBean.allEvents}">
 
             <h:column>
@@ -54,7 +56,7 @@
 
         </h:dataTable>
 
-        <h1>All registrations</h1>
+        <h2>All registrations</h2>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminEventsBean.registrations}">
             No student has registered for an event yet.
@@ -62,6 +64,7 @@
 
         <h:dataTable value="#{adminEventsBean.registrations}" var="registration"
                      styleClass="table" headerClass="table-header" rowClasses="table-row"
+                     p:tabindex="0"
                      rendered="#{not empty adminEventsBean.registrations}">
 
             <h:column>
