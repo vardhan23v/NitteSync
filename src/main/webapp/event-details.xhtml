@@ -12,6 +12,7 @@
     <f:viewAction> calls load() once, after the parameter has been set
 -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">#{empty eventDetailsBean.event ? 'Event details' : eventDetailsBean.event.title} &#183; NitteSync</ui:define>
 
     <f:metadata>
         <f:viewParam name="eventId" value="#{eventDetailsBean.eventId}"/>
@@ -22,73 +23,109 @@
 
     <ui:define name="content">
 
-        <h:panelGroup rendered="#{empty eventDetailsBean.event}">
-            <h1>Event details</h1>
-            <p class="empty">The event could not be loaded.</p>
-            <h:link outcome="/events.xhtml" value="Back to events" styleClass="button"/>
-        </h:panelGroup>
+        <div class="detail-layout #{empty eventDetailsBean.event ? 'is-missing' : ''}">
 
-        <h:panelGroup rendered="#{not empty eventDetailsBean.event}">
-            <h1>#{eventDetailsBean.event.title}</h1>
+            <div class="detail-main">
+                <h:panelGroup rendered="#{empty eventDetailsBean.event}" layout="block">
+                    <p class="eyebrow">Event details</p>
+                    <h1>Event not found</h1>
+                    <p class="empty">The event could not be loaded. It may have been removed,
+                        or the link may be incomplete.</p>
+                    <p><h:link outcome="/events.xhtml" value="Back to events" styleClass="button"/></p>
+                </h:panelGroup>
 
-            <div class="detail-box">
-                <dl>
-                    <dt>Date</dt>
-                    <dd>
-                        <h:outputText value="#{eventDetailsBean.event.eventDate}">
-                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
-                        </h:outputText>
-                    </dd>
+                <h:panelGroup rendered="#{not empty eventDetailsBean.event}" layout="block">
+                    <p class="eyebrow">Event details</p>
+                    <h1>#{eventDetailsBean.event.title}</h1>
 
-                    <dt>Venue</dt>
-                    <dd>#{eventDetailsBean.event.venue}</dd>
+                    <dl class="event-meta">
+                        <div>
+                            <dt>Date</dt>
+                            <dd>
+                                <h:outputText value="#{eventDetailsBean.event.eventDate}">
+                                    <f:convertDateTime type="localDate" pattern="EEE, dd MMM yyyy"/>
+                                </h:outputText>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>Venue</dt>
+                            <dd>#{eventDetailsBean.event.venue}</dd>
+                        </div>
+                        <div>
+                            <dt>Organised by</dt>
+                            <dd>#{eventDetailsBean.event.organizerName}</dd>
+                        </div>
+                    </dl>
 
-                    <dt>Organised by</dt>
-                    <dd>#{eventDetailsBean.event.organizerName}</dd>
+                    <h2>About this event</h2>
+                    <ui:fragment rendered="#{not empty eventDetailsBean.event.description}">
+                        <p class="prose">#{eventDetailsBean.event.description}</p>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{empty eventDetailsBean.event.description}">
+                        <p class="muted">The organiser has not added a description.</p>
+                    </ui:fragment>
+                </h:panelGroup>
+            </div>
 
-                    <dt>Status</dt>
-                    <dd><h:outputText value="#{eventDetailsBean.event.status}"
-                                      styleClass="badge #{eventDetailsBean.event.status}"/></dd>
+            <!--
+              The registration form sits OUTSIDE the event block on purpose.
+              On a postback JSF decides which components exist before the view
+              action has loaded the event, so a form nested inside "the event is
+              loaded" could never call register(). This form only depends on the
+              role of the logged-in user, which is known on every request.
+            -->
+            <aside class="detail-aside">
+                <div class="register-card">
+                    <p class="eyebrow">Registration</p>
+                    <h2 class="register-title">#{eventDetailsBean.alreadyRegistered ? 'Your spot.' : 'Grab a spot.'}</h2>
 
-                    <dt>Registrations</dt>
-                    <dd>#{eventDetailsBean.event.registrationCount}</dd>
+                    <h:panelGroup rendered="#{not empty eventDetailsBean.event}" layout="block">
+                        <dl class="facts">
+                            <div>
+                                <dt>Status</dt>
+                                <dd>
+                                    <h:outputText value="#{eventDetailsBean.event.status}"
+                                                  styleClass="badge #{eventDetailsBean.event.status}"/>
+                                </dd>
+                            </div>
+                            <div>
+                                <dt>Registered</dt>
+                                <dd>#{eventDetailsBean.event.registrationCount}</dd>
+                            </div>
+                        </dl>
+                    </h:panelGroup>
 
-                    <dt>Description</dt>
-                    <dd>#{eventDetailsBean.event.description}</dd>
-                </dl>
-</div>
-        </h:panelGroup>
+                    <h:panelGroup rendered="#{loginBean.student}" layout="block">
+                        <h:form>
+                            <!-- A form posts to the page without its query string, so the event id
+                                 is carried back in a hidden field and register() knows which event
+                                 is meant. -->
+                            <h:inputHidden value="#{eventDetailsBean.eventId}"/>
+                            <h:commandButton value="Register for this event"
+                                             action="#{eventDetailsBean.register}"
+                                             styleClass="button button-block"
+                                             rendered="#{not eventDetailsBean.alreadyRegistered}"/>
+                        </h:form>
+                        <h:panelGroup layout="block" styleClass="alert alert-info"
+                                      rendered="#{eventDetailsBean.alreadyRegistered}">
+                            You're registered. See you there.
+                        </h:panelGroup>
+                        <ui:fragment rendered="#{not eventDetailsBean.alreadyRegistered}">
+                            <p class="hint-text">One registration per student.</p>
+                        </ui:fragment>
+                    </h:panelGroup>
 
-        <!--
-          The registration form sits OUTSIDE the block above on purpose.
-          On a postback JSF decides which components exist before the view action
-          has loaded the event, so a form nested inside "the event is loaded"
-          could never call register(). This form only depends on the role of the
-          logged-in user, which is known on every request.
-        -->
-        <h:panelGroup rendered="#{loginBean.student}">
-            <h:form>
-                <!-- A form posts to the page without its query string, so the event id
-                     is carried back in a hidden field and register() knows which event
-                     is meant. -->
-                <h:inputHidden value="#{eventDetailsBean.eventId}"/>
-                <h:commandButton value="Register for this event"
-                                 action="#{eventDetailsBean.register}"
-                                 styleClass="button"
-                                 rendered="#{not eventDetailsBean.alreadyRegistered}"/>
-            </h:form>
-            <h:panelGroup layout="block" styleClass="alert alert-info"
-                          rendered="#{eventDetailsBean.alreadyRegistered}">
-                You are already registered for this event.
-            </h:panelGroup>
-        </h:panelGroup>
+                    <ui:fragment rendered="#{loginBean.club or loginBean.admin}">
+                        <p class="muted">Only student accounts can register for events.</p>
+                    </ui:fragment>
+                </div>
+            </aside>
+        </div>
 
-        <h:panelGroup layout="block" styleClass="muted"
-                      rendered="#{loginBean.club or loginBean.admin}">
-            Only student accounts can register for events.
-        </h:panelGroup>
-
-        <p><h:link outcome="/events.xhtml" value="Back to events" styleClass="link"/></p>
+        <h:link outcome="/events.xhtml" styleClass="back-link"
+                rendered="#{not empty eventDetailsBean.event}">
+            <span aria-hidden="true">&#8592;</span> Back to events
+        </h:link>
 
     </ui:define>
 </ui:composition>

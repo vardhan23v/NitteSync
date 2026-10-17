@@ -6,76 +6,106 @@
 
 <!-- Dashboard: the numbers and the next events, per role. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Dashboard &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>Dashboard</h1>
-        <p class="muted">Logged in as <strong>#{loginBean.currentUser.name}</strong>
-            (#{loginBean.currentUser.role})</p>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Signed in as #{loginBean.currentUser.name} &#183; #{loginBean.currentUser.role}</p>
+                <h1>Dashboard</h1>
+                <ui:fragment rendered="#{loginBean.student}">
+                    <p class="lede">Your registrations and what's next on campus.</p>
+                </ui:fragment>
+                <ui:fragment rendered="#{loginBean.club}">
+                    <p class="lede">Your club's listings, from draft to approved.</p>
+                </ui:fragment>
+                <ui:fragment rendered="#{loginBean.admin}">
+                    <p class="lede">The approval queue and the whole board.</p>
+                </ui:fragment>
+            </div>
+        </div>
 
         <!-- Student summary -->
         <h:panelGroup rendered="#{loginBean.student}">
-            <div class="stat-row">
+            <div class="stats">
                 <div class="stat">
                     <span class="stat-number">#{dashboardBean.myRegistrationCount}</span>
-                    <span class="stat-label">Events you registered for</span>
+                    <span class="stat-label">Your registrations</span>
                 </div>
                 <div class="stat">
                     <span class="stat-number">#{dashboardBean.upcomingEventCount}</span>
-                    <span class="stat-label">Upcoming events shown below</span>
+                    <span class="stat-label">Coming up</span>
                 </div>
             </div>
-            <p><h:link outcome="/events.xhtml" value="Browse all events" styleClass="button"/></p>
+            <div class="actions">
+                <h:link outcome="/events.xhtml" value="Browse all events" styleClass="button"/>
+                <h:link outcome="/my-registrations.xhtml" value="My registrations" styleClass="button button-secondary"/>
+            </div>
         </h:panelGroup>
 
         <!-- Club summary -->
         <h:panelGroup rendered="#{loginBean.club}">
-            <div class="stat-row">
+            <div class="stats">
                 <div class="stat">
                     <span class="stat-number">#{dashboardBean.myEventCount}</span>
                     <span class="stat-label">Events created by your club</span>
                 </div>
             </div>
-            <p>
+            <div class="actions">
                 <h:link outcome="/club-events.xhtml" value="Manage my events" styleClass="button"/>
                 <h:link outcome="/event-form.xhtml" value="Create a new event" styleClass="button button-secondary"/>
-            </p>
+            </div>
         </h:panelGroup>
 
         <!-- Administrator summary -->
         <h:panelGroup rendered="#{loginBean.admin}">
-            <div class="stat-row">
+            <div class="stats">
                 <div class="stat">
                     <span class="stat-number">#{dashboardBean.pendingEventCount}</span>
-                    <span class="stat-label">Events waiting for approval</span>
+                    <span class="stat-label">Events waiting for your decision</span>
                 </div>
             </div>
-            <p>
+            <div class="actions">
                 <h:link outcome="/admin-approval.xhtml" value="Review approvals" styleClass="button"/>
                 <h:link outcome="/admin-events.xhtml" value="All events and registrations" styleClass="button button-secondary"/>
-            </p>
+            </div>
         </h:panelGroup>
 
-        <h2>Upcoming events</h2>
+        <h2>Next on campus</h2>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty dashboardBean.upcomingEvents}">
-            There are no approved events yet. Please check back later.
+            No approved events yet. Once a club's event is approved it will show up here.
         </h:panelGroup>
 
-        <div class="cards">
+        <div class="next-list">
             <ui:repeat value="#{dashboardBean.upcomingEvents}" var="event">
-                <div class="card">
-                    <h3>#{event.title}</h3>
-                    <p class="muted">
-                        <h:outputText value="#{event.eventDate}">
-                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
-                        </h:outputText>
-                        &#183; #{event.venue}
-                    </p>
-                    <p>#{event.description}</p>
-                    <h:link outcome="/event-details.xhtml" value="View details" styleClass="link">
-                        <f:param name="eventId" value="#{event.id}"/>
-                    </h:link>
-                </div>
+                <h:link outcome="/event-details.xhtml" styleClass="next-item">
+                    <f:param name="eventId" value="#{event.id}"/>
+                    <span class="date-chip">
+                        <span class="date-day">
+                            <h:outputText value="#{event.eventDate}">
+                                <f:convertDateTime type="localDate" pattern="dd"/>
+                            </h:outputText>
+                        </span>
+                        <span class="date-month">
+                            <h:outputText value="#{event.eventDate}">
+                                <f:convertDateTime type="localDate" pattern="MMM"/>
+                            </h:outputText>
+                        </span>
+                        <span class="date-year">
+                            <h:outputText value="#{event.eventDate}">
+                                <f:convertDateTime type="localDate" pattern="yyyy"/>
+                            </h:outputText>
+                        </span>
+                    </span>
+                    <span>
+                        <span class="next-title">#{event.title}</span>
+                        <span class="next-meta">
+                            #{event.venue} &#183; #{event.organizerName}
+                        </span>
+                    </span>
+                    <span class="next-arrow" aria-hidden="true">&#8594;</span>
+                </h:link>
             </ui:repeat>
         </div>
 

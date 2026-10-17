@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
 import com.nittesync.model.User;
@@ -13,13 +15,16 @@ import com.nittesync.util.DataAccessException;
 /**
  * All SQL that touches the users table.
  *
- * The application never inserts or updates users: the accounts come from
- * sample-data.sql. Only lookups are needed here.
+ * Accounts are created by the public registration page (or seeded by
+ * sample-data.sql); the application still never updates an existing user.
  */
 public class UserDAO {
 
     private static final String FIND_BY_EMAIL =
             "SELECT id, name, email, password_hash, role, created_at FROM users WHERE email = ?";
+
+    private static final String INSERT_USER =
+            "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)";
 
     /**
      * Looks up one account by email address.
@@ -40,6 +45,38 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             throw new DataAccessException("Could not look up the user account.", e);
+        }
+    }
+
+    /**
+     * Inserts a new account and copies the generated id back into the object.
+     *
+     * The UNIQUE constraint on users.email is the final guard: if two requests
+     * race past the "email already exists" check, the second INSERT fails here.
+     *
+     * @throws DataAccessException with a readable message when the email is
+     *         already taken or the database is unavailable
+     */
+    public void create(User user) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPasswordHash());
+            statement.setString(4, user.getRole());
+            statement.executeUpdate();
+
+            try (ResultSet keys = statement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    user.setId(keys.getInt(1));
+                }
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DataAccessException("An account with that email already exists.", e);
+        } catch (SQLException e) {
+            throw new DataAccessException("Could not create the account.", e);
         }
     }
 

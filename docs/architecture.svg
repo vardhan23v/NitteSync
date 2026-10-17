@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 900" width="1180" height="900"
+     role="img" aria-labelledby="archTitle archDesc"
+     font-family="'Red Hat Text', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+
+  <title id="archTitle">NitteSync architecture</title>
+  <desc id="archDesc">A layered diagram. Browsers for students, clubs and administrators post HTML
+    forms to a FacesServlet inside Apache Tomcat 10.1, behind an AuthFilter that gates login and
+    role. Facelets views are driven by CDI backing beans, which call services that hold the
+    business rules, which call DAOs that talk to MySQL over JDBC.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5"
+            orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#a84e00"/>
+    </marker>
+  </defs>
+
+  <!-- paper -->
+  <rect x="0" y="0" width="1180" height="900" rx="18" fill="#fff8ec" stroke="#e8d5b4"/>
+
+  <!-- ===================== header ===================== -->
+  <text x="56" y="70" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="2.4"
+        font-family="'Red Hat Display', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">ARCHITECTURE &#183; CAMPUS EVENT MANAGEMENT</text>
+  <text x="56" y="120" fill="#3b1f42" font-size="44" font-weight="800" letter-spacing="-1.2"
+        font-family="'Red Hat Display', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">NitteSync</text>
+  <text x="1124" y="74" text-anchor="end" fill="#6e5473" font-size="13.5">Jakarta Faces 4.0 &#183; CDI &#183; JDBC &#183; MySQL</text>
+  <text x="1124" y="98" text-anchor="end" fill="#6e5473" font-size="13.5">Apache Tomcat 10.1 &#183; Java 21 &#183; Maven WAR</text>
+  <line x1="56" y1="142" x2="1124" y2="142" stroke="#3b1f42" stroke-width="2"/>
+
+  <!-- ===================== 1. client ===================== -->
+  <rect x="56" y="174" width="720" height="76" rx="14" fill="#f7e8cc" stroke="#e8d5b4"/>
+  <text x="76" y="207" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="1.6">CLIENT</text>
+  <text x="76" y="226" fill="#6e5473" font-size="11.5">web browser</text>
+
+  <rect x="196" y="190" width="176" height="44" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="284" y="209" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">Student</text>
+  <text x="284" y="225" text-anchor="middle" fill="#6e5473" font-size="11">browse &#183; register</text>
+
+  <rect x="388" y="190" width="176" height="44" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="476" y="209" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">Club</text>
+  <text x="476" y="225" text-anchor="middle" fill="#6e5473" font-size="11">create &#183; submit</text>
+
+  <rect x="580" y="190" width="176" height="44" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="668" y="209" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">Administrator</text>
+  <text x="668" y="225" text-anchor="middle" fill="#6e5473" font-size="11">approve &#183; reject</text>
+
+  <path d="M416 250 V286" stroke="#a84e00" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="430" y="272" fill="#6e5473" font-size="12">HTTP &#183; HTML form posts to *.xhtml</text>
+
+  <!-- ===================== 2. web layer ===================== -->
+  <rect x="56" y="288" width="720" height="182" rx="14" fill="#f7e8cc" stroke="#e8d5b4"/>
+  <text x="76" y="320" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="1.6">WEB LAYER</text>
+  <text x="76" y="339" fill="#6e5473" font-size="11.5">Tomcat 10.1</text>
+  <text x="76" y="356" fill="#6e5473" font-size="11.5">Servlet 6.0</text>
+
+  <rect x="196" y="304" width="560" height="46" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="216" y="324" fill="#3b1f42" font-size="12.5" font-weight="700">AuthFilter &#8212; login and role gate</text>
+  <text x="216" y="340" fill="#6e5473" font-size="11">public: /index, /login, /register</text>
+
+  <rect x="196" y="360" width="560" height="46" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="216" y="380" fill="#3b1f42" font-size="12.5" font-weight="700">FacesServlet + Facelets views</text>
+  <text x="216" y="396" fill="#6e5473" font-size="11">layout.xhtml template and 11 pages</text>
+
+  <rect x="196" y="416" width="560" height="46" rx="10" fill="#fffcf5" stroke="#7a3fb0"/>
+  <text x="216" y="436" fill="#3b1f42" font-size="12.5" font-weight="700">@Named CDI backing beans &#8212; Weld 5.1.7</text>
+  <text x="216" y="452" fill="#6e5473" font-size="11">request, view and session scoped</text>
+
+  <path d="M416 470 V504" stroke="#a84e00" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="430" y="490" fill="#6e5473" font-size="12">service calls</text>
+
+  <!-- ===================== 3. service ===================== -->
+  <rect x="56" y="508" width="720" height="88" rx="14" fill="#f7e8cc" stroke="#e8d5b4"/>
+  <text x="76" y="538" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="1.6">SERVICE</text>
+  <text x="76" y="557" fill="#6e5473" font-size="11.5">business rules</text>
+  <text x="76" y="574" fill="#6e5473" font-size="11.5">server-side</text>
+
+  <rect x="196" y="524" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="284" y="548" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">AuthService</text>
+  <text x="284" y="566" text-anchor="middle" fill="#6e5473" font-size="11">login &#183; register</text>
+
+  <rect x="388" y="524" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="476" y="548" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">EventService</text>
+  <text x="476" y="566" text-anchor="middle" fill="#6e5473" font-size="11">lifecycle rules</text>
+
+  <rect x="580" y="524" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="668" y="548" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">RegistrationService</text>
+  <text x="668" y="566" text-anchor="middle" fill="#6e5473" font-size="11">one per student</text>
+
+  <path d="M416 596 V630" stroke="#a84e00" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="430" y="616" fill="#6e5473" font-size="12">DAO calls</text>
+
+  <!-- ===================== 4. persistence ===================== -->
+  <rect x="56" y="634" width="720" height="88" rx="14" fill="#f7e8cc" stroke="#e8d5b4"/>
+  <text x="76" y="666" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="1.6">PERSISTENCE</text>
+  <text x="76" y="685" fill="#6e5473" font-size="11.5">JDBC</text>
+
+  <rect x="196" y="650" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="284" y="674" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">UserDAO</text>
+  <text x="284" y="692" text-anchor="middle" fill="#6e5473" font-size="11">users table</text>
+
+  <rect x="388" y="650" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="476" y="674" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">EventDAO</text>
+  <text x="476" y="692" text-anchor="middle" fill="#6e5473" font-size="11">events table</text>
+
+  <rect x="580" y="650" width="176" height="56" rx="10" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="668" y="674" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">RegistrationDAO</text>
+  <text x="668" y="692" text-anchor="middle" fill="#6e5473" font-size="11">registrations table</text>
+
+  <path d="M416 722 V756" stroke="#a84e00" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="430" y="742" fill="#6e5473" font-size="12">Connector/J 8.4 &#183; db.properties</text>
+
+  <!-- ===================== 5. data ===================== -->
+  <rect x="56" y="760" width="720" height="76" rx="14" fill="#f7e8cc" stroke="#e8d5b4"/>
+  <text x="76" y="793" fill="#a84e00" font-size="12" font-weight="700" letter-spacing="1.6">DATA</text>
+  <text x="76" y="812" fill="#6e5473" font-size="11.5">MySQL 8</text>
+
+  <rect x="196" y="776" width="560" height="44" rx="10" fill="#fffcf5" stroke="#3b1f42"/>
+  <text x="476" y="795" text-anchor="middle" fill="#3b1f42" font-size="12.5" font-weight="700">nitte_sync</text>
+  <text x="476" y="811" text-anchor="middle" fill="#6e5473" font-size="11">users &#183; events &#183; registrations</text>
+
+  <!-- ===================== cross-cutting ===================== -->
+  <rect x="808" y="174" width="316" height="228" rx="14" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="828" y="204" fill="#a84e00" font-size="11.5" font-weight="700" letter-spacing="1.6">CROSS-CUTTING</text>
+  <line x1="828" y1="216" x2="1104" y2="216" stroke="#e8d5b4"/>
+
+  <circle cx="832" cy="232" r="2.5" fill="#a84e00"/>
+  <text x="846" y="236" fill="#3b1f42" font-size="12">DBConnection &#8212; db.properties</text>
+  <circle cx="832" cy="259" r="2.5" fill="#a84e00"/>
+  <text x="846" y="263" fill="#3b1f42" font-size="12">PasswordUtil &#8212; SHA-256 hashing</text>
+  <circle cx="832" cy="286" r="2.5" fill="#a84e00"/>
+  <text x="846" y="290" fill="#3b1f42" font-size="12">SessionUtil &#8212; signed-in user</text>
+  <circle cx="832" cy="313" r="2.5" fill="#a84e00"/>
+  <text x="846" y="317" fill="#3b1f42" font-size="12">FacesUtil &#8212; messages, redirects</text>
+  <circle cx="832" cy="340" r="2.5" fill="#a84e00"/>
+  <text x="846" y="344" fill="#3b1f42" font-size="12">DataAccessException &#8212; safe errors</text>
+  <circle cx="832" cy="367" r="2.5" fill="#a84e00"/>
+  <text x="846" y="371" fill="#3b1f42" font-size="12">TestConnection &#8212; DB smoke test</text>
+
+  <!-- ===================== runtime ===================== -->
+  <rect x="808" y="426" width="316" height="192" rx="14" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="828" y="456" fill="#a84e00" font-size="11.5" font-weight="700" letter-spacing="1.6">RUNTIME</text>
+  <line x1="828" y1="468" x2="1104" y2="468" stroke="#e8d5b4"/>
+
+  <circle cx="832" cy="484" r="2.5" fill="#7a3fb0"/>
+  <text x="846" y="488" fill="#3b1f42" font-size="12">Tomcat 10.1 &#183; Servlet 6.0</text>
+  <circle cx="832" cy="511" r="2.5" fill="#7a3fb0"/>
+  <text x="846" y="515" fill="#3b1f42" font-size="12">Java 21 &#183; Maven WAR build</text>
+  <circle cx="832" cy="538" r="2.5" fill="#7a3fb0"/>
+  <text x="846" y="542" fill="#3b1f42" font-size="12">Weld 5.1.7 &#183; Mojarra 4.0.27</text>
+  <circle cx="832" cy="565" r="2.5" fill="#7a3fb0"/>
+  <text x="846" y="569" fill="#3b1f42" font-size="12">Context path /nittesync</text>
+  <circle cx="832" cy="592" r="2.5" fill="#7a3fb0"/>
+  <text x="846" y="596" fill="#3b1f42" font-size="12">No JavaScript framework</text>
+
+  <!-- ===================== lifecycle ===================== -->
+  <rect x="808" y="642" width="316" height="194" rx="14" fill="#fffcf5" stroke="#e8d5b4"/>
+  <text x="828" y="672" fill="#a84e00" font-size="11.5" font-weight="700" letter-spacing="1.6">EVENT LIFECYCLE</text>
+  <line x1="828" y1="684" x2="1104" y2="684" stroke="#e8d5b4"/>
+
+  <rect x="828" y="696" width="104" height="28" rx="14" fill="#fffcf5" stroke="#a18a85"/>
+  <text x="880" y="715" text-anchor="middle" fill="#3b1f42" font-size="11.5" font-weight="700">DRAFT</text>
+  <text x="952" y="715" fill="#6e5473" font-size="11.5">club creates an event</text>
+
+  <path d="M880 724 V734" stroke="#a84e00" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="828" y="738" width="104" height="28" rx="14" fill="#fff8e1" stroke="#855f00"/>
+  <text x="880" y="757" text-anchor="middle" fill="#855f00" font-size="11.5" font-weight="700">PENDING</text>
+  <text x="952" y="757" fill="#6e5473" font-size="11.5">submitted for approval</text>
+
+  <path d="M880 766 V776 H996 V784" stroke="#a84e00" stroke-width="1.8" fill="none" marker-end="url(#arrow)"/>
+  <path d="M880 776 V784" stroke="#a84e00" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="828" y="786" width="104" height="28" rx="14" fill="#f3fbe9" stroke="#33791f"/>
+  <text x="880" y="805" text-anchor="middle" fill="#33791f" font-size="11.5" font-weight="700">APPROVED</text>
+  <text x="880" y="826" text-anchor="middle" fill="#6e5473" font-size="11">students register</text>
+
+  <rect x="944" y="786" width="104" height="28" rx="14" fill="#fff5f0" stroke="#bb2449"/>
+  <text x="996" y="805" text-anchor="middle" fill="#bb2449" font-size="11.5" font-weight="700">REJECTED</text>
+  <text x="996" y="826" text-anchor="middle" fill="#6e5473" font-size="11">hidden from students</text>
+
+  <!-- ===================== footnote ===================== -->
+  <line x1="56" y1="850" x2="1124" y2="850" stroke="#e8d5b4"/>
+  <text x="56" y="872" fill="#6e5473" font-size="12">Every rule is enforced in the service layer and in AuthFilter &#8212; the interface only hides what the server would refuse.</text>
+</svg>

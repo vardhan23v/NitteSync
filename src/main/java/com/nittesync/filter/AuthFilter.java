@@ -49,6 +49,7 @@ public class AuthFilter implements Filter {
 
         // Public pages, and JSF resources such as the stylesheet: no login needed.
         if ("/index.xhtml".equals(path) || "/login.xhtml".equals(path)
+                || "/register.xhtml".equals(path)
                 || path.startsWith("/jakarta.faces.resource/")) {
             chain.doFilter(request, response);
             return;

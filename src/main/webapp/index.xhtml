@@ -6,30 +6,94 @@
 
 <!-- Public welcome page. It is the welcome-file of the application. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">NitteSync &#183; Campus events at Nitte</ui:define>
     <ui:define name="content">
 
         <section class="hero">
-            <h1>Welcome to NitteSync</h1>
-            <p>
-                NitteSync is the single place for campus events at Nitte.
-                Students discover events and register for them, clubs publish events,
-                and administrators approve what gets published.
-            </p>
-            <h:link outcome="/login.xhtml" value="Login to continue" styleClass="button"/>
+            <div class="hero-copy">
+                <p class="eyebrow">The campus noticeboard</p>
+                <h1>Campus life,<br/><span class="hero-accent">in sync.</span></h1>
+                <p class="lede">
+                    One noticeboard for everything happening at Nitte. Students find
+                    and join events, clubs publish them, and administrators keep the
+                    board honest.
+                </p>
+                <div class="hero-actions">
+                    <h:panelGroup rendered="#{not loginBean.loggedIn}">
+                        <h:link outcome="/login.xhtml" value="Login to continue" styleClass="button"/>
+                        <h:link outcome="/register.xhtml" value="Create an account"
+                                styleClass="button button-secondary"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{loginBean.loggedIn}">
+                        <h:link outcome="/dashboard.xhtml" value="Open dashboard" styleClass="button"/>
+                        <h:link outcome="/events.xhtml" value="Browse events"
+                                styleClass="button button-secondary"/>
+                    </h:panelGroup>
+                </div>
+            </div>
+
+            <!-- A typographic ticket: the one ornament on the page. It carries
+                 no data and repeats nothing, so it is hidden from screen readers. -->
+            <div class="hero-art" aria-hidden="true">
+                <div class="poster">
+                    <div class="poster-sheet">
+                        <div class="poster-meta">
+                            <span>Nitte / Campus</span>
+                            <span>2026&#8211;27</span>
+                        </div>
+
+                        <div class="poster-mark">
+                            <svg width="62" height="62" viewBox="0 0 48 48" fill="none"
+                                 stroke="currentColor" stroke-width="5" stroke-linecap="round">
+                                <path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/>
+                            </svg>
+                        </div>
+
+                        <p class="poster-line">Find<br/>your<br/>people.</p>
+                        <div class="poster-tear"></div>
+
+                        <div class="poster-foot">
+                            <span>Events<br/>Clubs<br/>Approvals</span>
+                            <span class="poster-bars">
+                                <span></span><span></span><span></span><span></span>
+                                <span></span><span></span><span></span><span></span>
+                                <span></span><span></span><span></span><span></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="cards">
-            <div class="card">
-                <h2>Students</h2>
-                <p>Browse the approved events, open an event to see the details and register with one click.</p>
+        <section class="roles" id="how-it-works" aria-labelledby="roles-title">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">How it works</p>
+                    <h2 id="roles-title">Three ways in.</h2>
+                </div>
             </div>
-            <div class="card">
-                <h2>Clubs</h2>
-                <p>Create an event, keep it as a draft, edit it, and submit it for approval when it is ready.</p>
-            </div>
-            <div class="card">
-                <h2>Administrators</h2>
-                <p>Approve or reject submitted events and see every event and registration in one place.</p>
+
+            <div class="role-grid">
+                <article class="role">
+                    <span class="role-no">01</span>
+                    <h3>Students</h3>
+                    <p>Find something worth showing up for. Browse approved events and claim a spot in one click.</p>
+                    <span class="role-foot">Browse &#183; Register</span>
+                </article>
+
+                <article class="role">
+                    <span class="role-no">02</span>
+                    <h3>Clubs</h3>
+                    <p>Draft it, refine it, send it. Publish your club's next event without the paperwork.</p>
+                    <span class="role-foot">Create &#183; Submit</span>
+                </article>
+
+                <article class="role">
+                    <span class="role-no">03</span>
+                    <h3>Administrators</h3>
+                    <p>Keep the board sharp. Review submissions and see every event and registration in one view.</p>
+                    <span class="role-foot">Review &#183; Approve</span>
+                </article>
             </div>
         </section>
 

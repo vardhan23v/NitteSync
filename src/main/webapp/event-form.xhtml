@@ -11,6 +11,7 @@
     event-form.xhtml?eventId=3  -> edit, loadForEdit() fills the fields
 -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">#{eventFormBean.editing ? 'Edit event' : 'Create event'} &#183; NitteSync</ui:define>
 
     <f:metadata>
         <f:viewParam name="eventId" value="#{eventFormBean.eventId}"/>
@@ -19,57 +20,76 @@
 
     <ui:define name="content">
 
-        <h1>#{eventFormBean.editing ? 'Edit event' : 'Create a new event'}</h1>
-
-        <h:form id="eventForm">
-
-            <!-- Carries the id of the event being edited through the postback. -->
-            <h:inputHidden value="#{eventFormBean.eventId}"/>
-
-            <div class="field">
-                <h:outputLabel for="title" value="Title"/>
-                <h:inputText id="title" value="#{eventFormBean.title}" styleClass="input"
-                             required="true" requiredMessage="The title is required."
-                             validatorMessage="The title must be between 3 and 150 characters."
-                             p:aria-describedby="eventForm:titleError">
-                    <f:validateLength minimum="3" maximum="150"/>
-                </h:inputText>
-                <h:message for="title" id="titleError" styleClass="field-error"/>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Club tools</p>
+                <h1>#{eventFormBean.editing ? 'Edit event' : 'Create a new event'}</h1>
+                <ui:fragment rendered="#{not eventFormBean.editing}">
+                    <p class="lede">A new event starts as a draft. Submit it for approval when it is ready.</p>
+                </ui:fragment>
+                <ui:fragment rendered="#{eventFormBean.editing}">
+                    <p class="lede">Update the details; saving puts the event back to draft.</p>
+                </ui:fragment>
             </div>
+        </div>
 
-            <div class="field">
-                <h:outputLabel for="description" value="Description"/>
-                <h:inputTextarea id="description" value="#{eventFormBean.description}"
-                                 styleClass="input" rows="4"/>
-                <h:message for="description" styleClass="field-error"/>
-            </div>
+        <div class="form-page">
+            <h:form id="eventForm">
 
-            <div class="field">
-                <h:outputLabel for="venue" value="Venue"/>
-                <h:inputText id="venue" value="#{eventFormBean.venue}" styleClass="input"
-                             required="true" requiredMessage="The venue is required."
-                             validatorMessage="The venue must not be longer than 150 characters."
-                             p:aria-describedby="eventForm:venueError">
-                    <f:validateLength minimum="1" maximum="150"/>
-                </h:inputText>
-                <h:message for="venue" id="venueError" styleClass="field-error"/>
-            </div>
+                <!-- Carries the id of the event being edited through the postback. -->
+                <h:inputHidden value="#{eventFormBean.eventId}"/>
 
-            <div class="field">
-                <h:outputLabel for="eventDate" value="Event date"/>
-                <h:inputText id="eventDate" value="#{eventFormBean.eventDate}" styleClass="input"
-                             required="true" requiredMessage="The event date is required."
-                             p:aria-describedby="eventForm:eventDateHint eventForm:eventDateError">
-                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
-                </h:inputText>
-                <span class="hint-text" id="eventDateHint">Format: yyyy-mm-dd, for example 2027-01-22</span>
-                <h:message for="eventDate" id="eventDateError" styleClass="field-error"/>
-            </div>
+                <div class="field">
+                    <h:outputLabel for="title" value="Title"/>
+                    <h:inputText id="title" value="#{eventFormBean.title}" styleClass="input"
+                                 required="true" requiredMessage="The title is required."
+                                 validatorMessage="The title must be between 3 and 150 characters."
+                                 p:aria-required="true"
+                                 p:aria-describedby="eventForm:titleError">
+                        <f:validateLength minimum="3" maximum="150"/>
+                    </h:inputText>
+                    <h:message for="title" id="titleError" styleClass="field-error"/>
+                </div>
 
-            <h:commandButton value="Save" action="#{eventFormBean.save}" styleClass="button"/>
-            <h:commandButton value="Cancel" action="#{eventFormBean.cancel}"
-                             styleClass="button button-secondary" immediate="true"/>
-        </h:form>
+                <div class="field">
+                    <h:outputLabel for="description" value="Description (optional)"/>
+                    <h:inputTextarea id="description" value="#{eventFormBean.description}"
+                                     styleClass="input" rows="4"
+                                     p:aria-describedby="eventForm:descriptionError"/>
+                    <h:message for="description" id="descriptionError" styleClass="field-error"/>
+                </div>
+
+                <div class="field">
+                    <h:outputLabel for="venue" value="Venue"/>
+                    <h:inputText id="venue" value="#{eventFormBean.venue}" styleClass="input"
+                                 required="true" requiredMessage="The venue is required."
+                                 validatorMessage="The venue must not be longer than 150 characters."
+                                 p:aria-required="true"
+                                 p:aria-describedby="eventForm:venueError">
+                        <f:validateLength minimum="1" maximum="150"/>
+                    </h:inputText>
+                    <h:message for="venue" id="venueError" styleClass="field-error"/>
+                </div>
+
+                <div class="field">
+                    <h:outputLabel for="eventDate" value="Event date"/>
+                    <h:inputText id="eventDate" value="#{eventFormBean.eventDate}" styleClass="input"
+                                 required="true" requiredMessage="The event date is required."
+                                 p:aria-required="true"
+                                 p:aria-describedby="eventForm:eventDateHint eventForm:eventDateError">
+                        <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                    </h:inputText>
+                    <span class="hint-text" id="eventDateHint">Format: 2027-01-22 (year-month-day).</span>
+                    <h:message for="eventDate" id="eventDateError" styleClass="field-error"/>
+                </div>
+
+                <div class="form-actions">
+                    <h:commandButton value="Save" action="#{eventFormBean.save}" styleClass="button"/>
+                    <h:commandButton value="Cancel" action="#{eventFormBean.cancel}"
+                                     styleClass="button button-secondary" immediate="true"/>
+                </div>
+            </h:form>
+        </div>
 
     </ui:define>
 </ui:composition>

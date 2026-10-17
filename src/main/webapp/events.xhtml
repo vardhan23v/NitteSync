@@ -6,32 +6,66 @@
 
 <!-- Approved events. This is the list students browse and register from. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Upcoming events &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>Upcoming events</h1>
-        <p class="muted">Only events approved by the administrator are shown here.</p>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">What's on</p>
+                <h1>Upcoming events</h1>
+                <p class="lede">Approved by the administration and open for registration.</p>
+            </div>
+            <div class="page-count">
+                <strong>#{eventListBean.events.size()}</strong>
+                <span>events live</span>
+            </div>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty eventListBean.events}">
-            No approved events yet. Please check back later.
+            No approved events yet. The board will fill up soon.
         </h:panelGroup>
 
         <div class="cards">
             <ui:repeat value="#{eventListBean.events}" var="event">
-                <div class="card">
-                    <h2>#{event.title}</h2>
-                    <p class="muted">
-                        <h:outputText value="#{event.eventDate}">
-                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
-                        </h:outputText>
-                        &#183; #{event.venue}
-                    </p>
-                    <p>#{event.description}</p>
-                    <p class="muted">Organised by #{event.organizerName}
-                        &#183; #{event.registrationCount} registered</p>
-                    <h:link outcome="/event-details.xhtml" value="View details and register" styleClass="link">
-                        <f:param name="eventId" value="#{event.id}"/>
-                    </h:link>
-                </div>
+                <article class="event-card">
+                    <div class="event-top">
+                        <div class="date-chip">
+                            <span class="date-day">
+                                <h:outputText value="#{event.eventDate}">
+                                    <f:convertDateTime type="localDate" pattern="dd"/>
+                                </h:outputText>
+                            </span>
+                            <span class="date-month">
+                                <h:outputText value="#{event.eventDate}">
+                                    <f:convertDateTime type="localDate" pattern="MMM"/>
+                                </h:outputText>
+                            </span>
+                            <span class="date-year">
+                                <h:outputText value="#{event.eventDate}">
+                                    <f:convertDateTime type="localDate" pattern="yyyy"/>
+                                </h:outputText>
+                            </span>
+                        </div>
+                        <div class="event-heading">
+                            <p class="eyebrow">#{event.organizerName}</p>
+                            <h2 class="event-title">#{event.title}</h2>
+                        </div>
+                    </div>
+
+                    <ui:fragment rendered="#{not empty event.description}">
+                        <p class="event-desc">#{event.description}</p>
+                    </ui:fragment>
+
+                    <div class="event-footer">
+                        <span class="event-venue">#{event.venue}</span>
+                        <span class="event-count">#{event.registrationCount} registered</span>
+                        <h:link outcome="/event-details.xhtml" styleClass="event-link">
+                            <f:param name="eventId" value="#{event.id}"/>
+                            #{loginBean.student ? 'View &amp; register' : 'View details'}
+                            <span class="arrow" aria-hidden="true">&#8594;</span>
+                        </h:link>
+                    </div>
+                </article>
             </ui:repeat>
         </div>
 

@@ -7,38 +7,73 @@
 
 <!-- Login page. The form is bound to the loginBean backing bean. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Login &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <div class="login-box">
-            <h1>Login</h1>
-
-            <h:form id="loginForm">
-                <div class="field">
-                    <h:outputLabel for="email" value="Email"/>
-                    <h:inputText id="email" value="#{loginBean.email}" styleClass="input"
-                                 required="true" requiredMessage="Email is required."
-                                 p:aria-describedby="loginForm:emailError"/>
-                    <h:message for="email" id="emailError" styleClass="field-error"/>
+        <div class="auth">
+            <div class="auth-poster" aria-hidden="true">
+                <div class="poster-meta">
+                    <span>Nitte / Campus</span>
+                    <span>Members</span>
                 </div>
-
-                <div class="field">
-                    <h:outputLabel for="password" value="Password"/>
-                    <h:inputSecret id="password" value="#{loginBean.password}" styleClass="input"
-                                   required="true" requiredMessage="Password is required."
-                                   p:aria-describedby="loginForm:passwordError"/>
-                    <h:message for="password" id="passwordError" styleClass="field-error"/>
+                <p class="auth-quote">Everything campus.<br/>One login.</p>
+                <p class="auth-note">Students, clubs and administrators share one account and one noticeboard.</p>
+                <div class="auth-mark">
+                    <svg width="230" height="230" viewBox="0 0 48 48" fill="none"
+                         stroke="currentColor" stroke-width="3.4" stroke-linecap="round">
+                        <path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/>
+                    </svg>
                 </div>
+            </div>
 
-                <h:commandButton value="Login" action="#{loginBean.login}" styleClass="button"/>
-            </h:form>
+            <div class="auth-body">
+                <p class="eyebrow">Members</p>
+                <h1>Welcome back.</h1>
+                <p class="lede">Log in to browse events, register for a spot, or manage your club's listings.</p>
 
-            <div class="hint">
-                <p><strong>Demo accounts</strong> - the password for all of them is <code>password</code></p>
-                <ul>
-                    <li>Administrator: admin@nitte.edu.in</li>
-                    <li>Club: coding.club@nitte.edu.in</li>
-                    <li>Student: rahul@nitte.edu.in</li>
+                <!-- Messages sit with the form on this page; the template hides its own
+                     copy for the login view so an error is never rendered twice. -->
+                <h:messages globalOnly="true" layout="list" styleClass="messages"
+                            infoClass="alert alert-info" errorClass="alert alert-error"
+                            warnClass="alert alert-warn"/>
+
+                <h:form id="loginForm" styleClass="auth-form">
+                    <div class="field">
+                        <h:outputLabel for="email" value="Email"/>
+                        <h:inputText id="email" value="#{loginBean.email}" styleClass="input"
+                                     required="true" requiredMessage="Email is required."
+                                     p:type="email" p:autocomplete="username"
+                                     p:aria-required="true"
+                                     p:aria-describedby="loginForm:emailError"/>
+                        <h:message for="email" id="emailError" styleClass="field-error"/>
+                    </div>
+
+                    <div class="field">
+                        <h:outputLabel for="password" value="Password"/>
+                        <h:inputSecret id="password" value="#{loginBean.password}" styleClass="input"
+                                       required="true" requiredMessage="Password is required."
+                                       p:autocomplete="current-password"
+                                       p:aria-required="true"
+                                       p:aria-describedby="loginForm:passwordError"/>
+                        <h:message for="password" id="passwordError" styleClass="field-error"/>
+                    </div>
+
+                    <h:commandButton value="Login" action="#{loginBean.login}" styleClass="button"/>
+                </h:form>
+
+                <p class="auth-switch">
+                    New to NitteSync?
+                    <h:link outcome="/register.xhtml" value="Create an account"/>
+                </p>
+
+                <hr class="auth-divider"/>
+                <p class="eyebrow">Demo access</p>
+                <ul class="demo-list">
+                    <li><span class="demo-role">Administrator</span><code>admin@nitte.edu.in</code></li>
+                    <li><span class="demo-role">Club</span><code>coding.club@nitte.edu.in</code></li>
+                    <li><span class="demo-role">Student</span><code>rahul@nitte.edu.in</code></li>
                 </ul>
+                <p class="hint-text">The password for every demo account is <code>password</code>.</p>
             </div>
         </div>
 

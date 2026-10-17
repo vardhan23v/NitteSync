@@ -7,12 +7,23 @@
 
 <!-- The events the logged-in student has registered for. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">My registrations &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>My registrations</h1>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Student</p>
+                <h1>My registrations</h1>
+                <p class="lede">Every event you've signed up for, in one list.</p>
+            </div>
+            <div class="page-count">
+                <strong>#{myRegistrationsBean.registrations.size()}</strong>
+                <span>spots claimed</span>
+            </div>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty myRegistrationsBean.registrations}">
-            You have not registered for any event yet.
+            You haven't registered for anything yet.
             <h:link outcome="/events.xhtml" value="Browse the events" styleClass="link"/>
         </h:panelGroup>
 
@@ -23,7 +34,10 @@
 
             <h:column>
                 <f:facet name="header">Event</f:facet>
-                #{registration.eventTitle}
+                <h:link outcome="/event-details.xhtml" styleClass="link">
+                    <f:param name="eventId" value="#{registration.eventId}"/>
+                    #{registration.eventTitle}
+                </h:link>
             </h:column>
 
             <h:column>

@@ -3,57 +3,107 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="jakarta.faces.passthrough"
       lang="en">
 
 <!--
   The page template.
 
   Every page of the application is a client of this template: it defines the
-  header, the navigation menu, the message area and the footer once, and each
-  page only supplies its own content inside <ui:define name="content">.
+  masthead, the navigation, the message area and the footer once, and each page
+  only supplies its own content inside <ui:define name="content">.
 -->
 <h:head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>NitteSync</title>
+    <title><ui:insert name="title">NitteSync &#183; Campus events at Nitte</ui:insert></title>
 
     <!-- Citrus theme fonts. The font tokens in style.css carry system fallbacks,
          so the app still renders correctly on a machine with no network. -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@600;700&amp;family=Red+Hat+Text:wght@400;600&amp;display=swap"/>
+          href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@600;700;800&amp;family=Red+Hat+Text:wght@400;500;600;700&amp;display=swap"/>
 
-    <link rel="icon" type="image/png" href="#{request.contextPath}/resources/img/favicon.png"/>
+    <link rel="icon" type="image/svg+xml" href="#{request.contextPath}/resources/img/favicon.svg"/>
+    <link rel="alternate icon" type="image/png" href="#{request.contextPath}/resources/img/favicon.png"/>
+    <meta name="theme-color" content="#fff8ec"/>
     <h:outputStylesheet name="css/style.css"/>
 </h:head>
 
 <h:body>
-<div class="page">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="shell #{view.viewId eq '/event-details.xhtml' ? 'view-event' : ''}">
 
-    <header class="topbar">
-        <h:link outcome="/dashboard.xhtml" styleClass="brand" value="NitteSync"/>
-        <span class="tagline">Campus events at Nitte</span>
-        <h:form styleClass="logout-form">
-            <h:commandLink value="Logout" action="#{loginBean.logout}"
-                           styleClass="logout-link" rendered="#{loginBean.loggedIn}"/>
-        </h:form>
+    <header class="masthead">
+        <div class="masthead-inner">
+
+            <h:link outcome="#{loginBean.loggedIn ? '/dashboard.xhtml' : '/index.xhtml'}" styleClass="brand">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                         stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+                        <path d="M12 3.5v17M3.5 12h17M6 6l12 12M18 6 6 18"/>
+                    </svg>
+                </span>
+                <span class="brand-text">
+                    <span class="brand-name">NitteSync</span>
+                    <span class="brand-tag">Campus events &#183; Nitte</span>
+                </span>
+            </h:link>
+
+            <!-- Navigation: every entry is a plain GET link, shown by role. -->
+            <nav class="menu" aria-label="Main">
+                <h:link outcome="/index.xhtml" value="Home"
+                        styleClass="menu-link #{view.viewId eq '/index.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/index.xhtml' ? 'page' : 'false'}"
+                        rendered="#{not loginBean.loggedIn}"/>
+                <h:link outcome="/login.xhtml" value="Login"
+                        styleClass="menu-link #{view.viewId eq '/login.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/login.xhtml' ? 'page' : 'false'}"
+                        rendered="#{not loginBean.loggedIn}"/>
+                <h:link outcome="/register.xhtml" value="Register"
+                        styleClass="menu-link #{view.viewId eq '/register.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/register.xhtml' ? 'page' : 'false'}"
+                        rendered="#{not loginBean.loggedIn}"/>
+                <h:link outcome="/dashboard.xhtml" value="Dashboard"
+                        styleClass="menu-link #{view.viewId eq '/dashboard.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/dashboard.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.loggedIn}"/>
+                <h:link outcome="/events.xhtml" value="Events"
+                        styleClass="menu-link #{view.viewId eq '/events.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/events.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.loggedIn}"/>
+                <h:link outcome="/my-registrations.xhtml" value="My registrations"
+                        styleClass="menu-link #{view.viewId eq '/my-registrations.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/my-registrations.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.student}"/>
+                <h:link outcome="/club-events.xhtml" value="My events"
+                        styleClass="menu-link #{view.viewId eq '/club-events.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/club-events.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.club}"/>
+                <h:link outcome="/event-form.xhtml" value="Create event"
+                        styleClass="menu-link #{view.viewId eq '/event-form.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/event-form.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.club}"/>
+                <h:link outcome="/admin-approval.xhtml" value="Approvals"
+                        styleClass="menu-link #{view.viewId eq '/admin-approval.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/admin-approval.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.admin}"/>
+                <h:link outcome="/admin-events.xhtml" value="All events"
+                        styleClass="menu-link #{view.viewId eq '/admin-events.xhtml' ? 'is-active' : ''}"
+                        p:aria-current="#{view.viewId eq '/admin-events.xhtml' ? 'page' : 'false'}"
+                        rendered="#{loginBean.admin}"/>
+            </nav>
+
+            <h:form styleClass="account" rendered="#{loginBean.loggedIn}">
+                <span class="account-name">#{loginBean.currentUser.name}</span>
+                <h:commandLink value="Log out" action="#{loginBean.logout}"
+                               styleClass="logout-link"/>
+            </h:form>
+        </div>
     </header>
 
-    <!-- Navigation: every entry is a plain GET link, shown by role. -->
-    <nav class="menu">
-        <h:link outcome="/index.xhtml" value="Home" rendered="#{not loginBean.loggedIn}"/>
-        <h:link outcome="/login.xhtml" value="Login" rendered="#{not loginBean.loggedIn}"/>
-        <h:link outcome="/dashboard.xhtml" value="Dashboard" rendered="#{loginBean.loggedIn}"/>
-        <h:link outcome="/events.xhtml" value="Events" rendered="#{loginBean.loggedIn}"/>
-        <h:link outcome="/my-registrations.xhtml" value="My Registrations" rendered="#{loginBean.student}"/>
-        <h:link outcome="/club-events.xhtml" value="My Events" rendered="#{loginBean.club}"/>
-        <h:link outcome="/event-form.xhtml" value="Create Event" rendered="#{loginBean.club}"/>
-        <h:link outcome="/admin-approval.xhtml" value="Approvals" rendered="#{loginBean.admin}"/>
-        <h:link outcome="/admin-events.xhtml" value="All Events" rendered="#{loginBean.admin}"/>
-    </nav>
-
-    <main class="content">
+    <main class="content" id="main">
 
         <!-- Message left behind by AuthFilter when a page was opened without permission. -->
         <h:panelGroup rendered="#{not empty loginBean.authMessage}">
@@ -70,12 +120,22 @@
         -->
         <h:messages globalOnly="true" layout="list" styleClass="messages"
                     infoClass="alert alert-info" errorClass="alert alert-error"
-                    warnClass="alert alert-warn"/>
+                    warnClass="alert alert-warn"
+                    rendered="#{view.viewId ne '/login.xhtml' and view.viewId ne '/register.xhtml'}"/>
     </main>
 
     <footer class="footer">
-        <p>NitteSync - Java and Spring Framework Lab mini-project.
-           Built with Jakarta Faces 4.0, JDBC and MySQL.</p>
+        <div class="footer-brand">
+            <span class="brand-mark brand-mark-small" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                     stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                    <path d="M12 3.5v17M3.5 12h17M6 6l12 12M18 6 6 18"/>
+                </svg>
+            </span>
+            <span>NitteSync</span>
+        </div>
+        <p class="footer-note">A Java and Spring Framework Lab mini-project.</p>
+        <p class="footer-tech">Jakarta Faces 4.0 &#183; JDBC &#183; MySQL</p>
     </footer>
 </div>
 </h:body>

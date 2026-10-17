@@ -7,18 +7,30 @@
 
 <!-- The events created by the logged-in club, with the actions a club may run. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">My events &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>My events</h1>
-        <p class="muted">
-            A new event starts as a draft. Submit it for approval when it is ready;
-            an approved event can no longer be edited or deleted.
-        </p>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Club tools</p>
+                <h1>My events</h1>
+                <p class="lede">
+                    A new event starts as a draft. Submit it for approval when it is ready;
+                    an approved event can no longer be edited or deleted.
+                </p>
+            </div>
+            <div class="page-count">
+                <strong>#{clubEventBean.events.size()}</strong>
+                <span>events created</span>
+            </div>
+        </div>
 
-        <p><h:link outcome="/event-form.xhtml" value="Create a new event" styleClass="button"/></p>
+        <div class="actions">
+            <h:link outcome="/event-form.xhtml" value="Create a new event" styleClass="button"/>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty clubEventBean.events}">
-            Your club has not created any event yet.
+            Your club hasn't created any events yet. Start with a draft.
         </h:panelGroup>
 
         <h:form rendered="#{not empty clubEventBean.events}">
@@ -51,26 +63,27 @@
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Registrations</f:facet>
+                    <f:facet name="header">Registered</f:facet>
                     #{event.registrationCount}
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">Actions</f:facet>
+                    <div class="row-actions">
+                        <h:link outcome="/event-form.xhtml" value="Edit" styleClass="link"
+                                rendered="#{clubEventBean.canEdit(event)}">
+                            <f:param name="eventId" value="#{event.id}"/>
+                        </h:link>
 
-                    <h:link outcome="/event-form.xhtml" value="Edit" styleClass="link"
-                            rendered="#{clubEventBean.canEdit(event)}">
-                        <f:param name="eventId" value="#{event.id}"/>
-                    </h:link>
+                        <h:commandButton value="Submit for approval" styleClass="button button-small"
+                                         action="#{clubEventBean.submit(event.id)}"
+                                         rendered="#{clubEventBean.canSubmit(event)}"/>
 
-                    <h:commandButton value="Submit for approval" styleClass="button button-small"
-                                     action="#{clubEventBean.submit(event.id)}"
-                                     rendered="#{clubEventBean.canSubmit(event)}"/>
-
-                    <h:commandButton value="Delete" styleClass="button button-small button-danger"
-                                     action="#{clubEventBean.delete(event.id)}"
-                                     rendered="#{clubEventBean.canEdit(event)}"
-                                     onclick="return confirm('Delete this event?');"/>
+                        <h:commandButton value="Delete" styleClass="button button-small button-danger"
+                                         action="#{clubEventBean.delete(event.id)}"
+                                         rendered="#{clubEventBean.canEdit(event)}"
+                                         onclick="return confirm('Delete this event?');"/>
+                    </div>
                 </h:column>
 
             </h:dataTable>

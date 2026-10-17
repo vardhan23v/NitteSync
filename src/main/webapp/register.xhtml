@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="jakarta.faces.passthrough">
+
+<!-- Public account registration. Students and clubs can join; admins cannot. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Create account &#183; NitteSync</ui:define>
+    <ui:define name="content">
+
+        <div class="auth">
+            <div class="auth-poster" aria-hidden="true">
+                <div class="poster-meta">
+                    <span>Nitte / Campus</span>
+                    <span>Join</span>
+                </div>
+                <p class="auth-quote">Join the board.<br/>Find your people.</p>
+                <p class="auth-note">One account for events, clubs and the people who make them happen.</p>
+                <div class="auth-mark">
+                    <svg width="230" height="230" viewBox="0 0 48 48" fill="none"
+                         stroke="currentColor" stroke-width="3.4" stroke-linecap="round">
+                        <path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="auth-body">
+                <p class="eyebrow">New account</p>
+                <h1>Join NitteSync.</h1>
+                <p class="lede">Create an account to browse events, register for a spot,
+                    or manage your club's listings.</p>
+
+                <h:messages globalOnly="true" layout="list" styleClass="messages"
+                            infoClass="alert alert-info" errorClass="alert alert-error"
+                            warnClass="alert alert-warn"/>
+
+                <h:panelGroup rendered="#{not loginBean.loggedIn}" layout="block">
+                    <h:form id="registerForm" styleClass="auth-form">
+                        <div class="field">
+                            <h:outputLabel for="name" value="Full name"/>
+                            <h:inputText id="name" value="#{registerBean.name}" styleClass="input"
+                                         required="true" requiredMessage="Your name is required."
+                                         validatorMessage="Your name must be between 2 and 100 characters."
+                                         p:autocomplete="name"
+                                         p:aria-required="true"
+                                         p:aria-describedby="registerForm:nameError">
+                                <f:validateLength minimum="2" maximum="100"/>
+                            </h:inputText>
+                            <h:message for="name" id="nameError" styleClass="field-error"/>
+                        </div>
+
+                        <div class="field">
+                            <h:outputLabel for="email" value="Email"/>
+                            <h:inputText id="email" value="#{registerBean.email}" styleClass="input"
+                                         required="true" requiredMessage="Your email is required."
+                                         validatorMessage="Enter a valid email address."
+                                         p:type="email" p:autocomplete="email"
+                                         p:aria-required="true"
+                                         p:aria-describedby="registerForm:emailError">
+                                <f:validateRegex pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}"/>
+                            </h:inputText>
+                            <h:message for="email" id="emailError" styleClass="field-error"/>
+                        </div>
+
+                        <div class="field">
+                            <h:outputLabel for="role" value="I'm joining as"/>
+                            <h:selectOneMenu id="role" value="#{registerBean.role}" styleClass="input"
+                                             label="Account type"
+                                             converterMessage="Choose a valid account type."
+                                             p:aria-describedby="registerForm:roleHint registerForm:roleError">
+                                <f:selectItem itemValue="STUDENT" itemLabel="Student &#8212; attend events"/>
+                                <f:selectItem itemValue="CLUB" itemLabel="Club &#8212; publish events"/>
+                            </h:selectOneMenu>
+                            <h:message for="role" id="roleError" styleClass="field-error"/>
+                            <span class="hint-text" id="roleHint">
+                                Club events are reviewed by an administrator before students see them.
+                            </span>
+                        </div>
+
+                        <div class="field">
+                            <h:outputLabel for="password" value="Password"/>
+                            <h:inputSecret id="password" value="#{registerBean.password}" styleClass="input"
+                                           required="true" requiredMessage="A password is required."
+                                           validatorMessage="Use at least 8 characters."
+                                           p:autocomplete="new-password"
+                                           p:aria-required="true"
+                                           p:aria-describedby="registerForm:passwordHint registerForm:passwordError">
+                                <f:validateLength minimum="8" maximum="100"/>
+                            </h:inputSecret>
+                            <span class="hint-text" id="passwordHint">At least 8 characters.</span>
+                            <h:message for="password" id="passwordError" styleClass="field-error"/>
+                        </div>
+
+                        <div class="field">
+                            <h:outputLabel for="confirmPassword" value="Confirm password"/>
+                            <h:inputSecret id="confirmPassword" value="#{registerBean.confirmPassword}"
+                                           styleClass="input"
+                                           required="true" requiredMessage="Please repeat your password."
+                                           p:autocomplete="new-password"
+                                           p:aria-required="true"
+                                           p:aria-describedby="registerForm:confirmPasswordError"/>
+                            <h:message for="confirmPassword" id="confirmPasswordError" styleClass="field-error"/>
+                        </div>
+
+                        <h:commandButton value="Create account" action="#{registerBean.register}"
+                                         styleClass="button button-block"/>
+                    </h:form>
+
+                    <p class="auth-switch">
+                        Already have an account?
+                        <h:link outcome="/login.xhtml" value="Login"/>
+                    </p>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{loginBean.loggedIn}" layout="block">
+                    <p class="alert alert-info">You're already signed in as #{loginBean.currentUser.name}.</p>
+                    <p><h:link outcome="/dashboard.xhtml" value="Go to dashboard" styleClass="button"/></p>
+                </h:panelGroup>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

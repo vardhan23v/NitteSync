@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NitteSync">
+  <rect width="64" height="64" rx="14" fill="#a84e00"/>
+  <g fill="none" stroke="#fffaf0" stroke-width="7" stroke-linecap="round">
+    <path d="M32 12v40M12 32h40M18.2 18.2l27.6 27.6M45.8 18.2 18.2 45.8"/>
+  </g>
+</svg>

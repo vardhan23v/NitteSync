@@ -7,13 +7,23 @@
 
 <!-- Events waiting for the administrator's decision. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Approval queue &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>Events waiting for approval</h1>
-        <p class="muted">Approving an event makes it visible to every student.</p>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Admin</p>
+                <h1>Approval queue</h1>
+                <p class="lede">Approving an event makes it visible to every student.</p>
+            </div>
+            <div class="page-count">
+                <strong>#{adminApprovalBean.pendingEvents.size()}</strong>
+                <span>waiting</span>
+            </div>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminApprovalBean.pendingEvents}">
-            No events are waiting for approval.
+            Nothing is waiting for approval. The queue is clear.
         </h:panelGroup>
 
         <h:form rendered="#{not empty adminApprovalBean.pendingEvents}">
@@ -54,10 +64,12 @@
 
                 <h:column>
                     <f:facet name="header">Decision</f:facet>
-                    <h:commandButton value="Approve" styleClass="button button-small"
-                                     action="#{adminApprovalBean.approve(event.id)}"/>
-                    <h:commandButton value="Reject" styleClass="button button-small button-danger"
-                                     action="#{adminApprovalBean.reject(event.id)}"/>
+                    <div class="row-actions">
+                        <h:commandButton value="Approve" styleClass="button button-small"
+                                         action="#{adminApprovalBean.approve(event.id)}"/>
+                        <h:commandButton value="Reject" styleClass="button button-small button-danger"
+                                         action="#{adminApprovalBean.reject(event.id)}"/>
+                    </div>
                 </h:column>
 
             </h:dataTable>

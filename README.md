@@ -1,5 +1,14 @@
 # NitteSync
 
+![Java 21](https://img.shields.io/badge/Java-21-a84e00?style=flat-square&logo=openjdk&logoColor=white)
+![Jakarta Faces 4.0](https://img.shields.io/badge/Jakarta%20Faces-4.0-7a3fb0?style=flat-square)
+![CDI](https://img.shields.io/badge/CDI-Weld%205.1.7-7a3fb0?style=flat-square)
+![Tomcat 10.1](https://img.shields.io/badge/Tomcat-10.1-a84e00?style=flat-square&logo=apachetomcat&logoColor=white)
+![MySQL 8](https://img.shields.io/badge/MySQL-8-33791f?style=flat-square&logo=mysql&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.8%2B-7a3fb0?style=flat-square&logo=apachemaven&logoColor=white)
+![No JavaScript frameworks](https://img.shields.io/badge/UI-no%20JS%20frameworks-6e5473?style=flat-square)
+[![Last commit](https://img.shields.io/github/last-commit/vardhan23v/NitteSync?style=flat-square&color=a84e00)](https://github.com/vardhan23v/NitteSync/commits/main)
+
 Campus event management platform for Nitte — a Java and Spring Framework Lab
 mini-project built with **Jakarta Faces 4.0 (JSF), JDBC and MySQL**.
 
@@ -39,25 +48,35 @@ NitteSync/
     │   ├── model/      User, Event, Registration
     │   ├── dao/        UserDAO, EventDAO, RegistrationDAO        (JDBC)
     │   ├── service/    AuthService, EventService, RegistrationService (rules)
-    │   ├── bean/       JSF backing beans (@Named)
+    │   ├── bean/       JSF backing beans (@Named), including RegisterBean
     │   ├── filter/     AuthFilter (login + role gate)
     │   └── util/       DBConnection, PasswordUtil, SessionUtil, FacesUtil,
     │                   DataAccessException, TestConnection
     ├── resources/      db.properties, schema.sql, sample-data.sql
     └── webapp/
-        ├── index.xhtml, login.xhtml, dashboard.xhtml, events.xhtml,
-        │   event-details.xhtml, my-registrations.xhtml, club-events.xhtml,
-        │   event-form.xhtml, admin-approval.xhtml, admin-events.xhtml
+        ├── index.xhtml, login.xhtml, register.xhtml, dashboard.xhtml,
+        │   events.xhtml, event-details.xhtml, my-registrations.xhtml,
+        │   club-events.xhtml, event-form.xhtml, admin-approval.xhtml,
+        │   admin-events.xhtml
         ├── resources/css/style.css
+        ├── resources/img/favicon.svg, favicon.png
         └── WEB-INF/    web.xml, beans.xml, faces-config.xml, templates/layout.xhtml
 ```
 
 Layers: **XHTML page → backing bean → service → DAO → JDBC → MySQL**.
 
+![NitteSync architecture: browsers post HTML forms to a FacesServlet in Tomcat behind AuthFilter,
+driving CDI backing beans, then services, DAOs and MySQL over JDBC](docs/architecture.svg)
+
+Each box in the diagram is a package under `src/main/java/com/nittesync`; the editable source is
+[`docs/architecture.svg`](docs/architecture.svg).
+
 The user interface follows the design direction recorded in
-[`docs/design.md`](docs/design.md): the *Citrus* theme (tangerine action on warm
-off-white, aubergine ink), with the palette, type scale, spacing, radii, shadows
-and motion tokens defined once in `src/main/webapp/resources/css/style.css`.
+[`docs/design.md`](docs/design.md): a **campus bulletin** treatment of the
+*Citrus* theme (tangerine action on warm off-white, aubergine ink), with
+editorial rules, day/month/year date stamps and a typographic ticket instead of
+stock imagery. The palette, type scale, spacing, radii, shadows and motion
+tokens are defined once in `src/main/webapp/resources/css/style.css`.
 Components use those tokens only, and the palette is contrast-checked.
 
 ---
@@ -147,6 +166,9 @@ Then open **http://localhost:8080/nittesync/**
 
 ## 6. What the application does
 
+* **Visitor** — create a student or club account from the Register page; the
+  new account is signed in immediately. Administrators are provisioned, never
+  self-registered.
 * **Student** — see approved events, open the details, register once per event,
   see the events registered for.
 * **Club** — create an event (starts as DRAFT), edit or delete its own events
@@ -161,6 +183,8 @@ not only by hiding buttons.
 
 ## 7. Not implemented
 
-Self-registration of accounts, password reset, e-mail notification, file
-uploads, event capacity limits, cancelling a registration, search, pagination,
-OAuth/JWT, Spring, Hibernate/JPA. All out of scope for the lab project.
+Club-account vetting (anyone can create a club account, but every event still
+needs administrator approval), e-mail verification, password reset, e-mail
+notification, file uploads, event capacity limits, cancelling a registration,
+search, pagination, OAuth/JWT, Spring, Hibernate/JPA. All out of scope for the
+lab project.

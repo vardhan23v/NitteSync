@@ -7,9 +7,20 @@
 
 <!-- Administrator overview: every event and every registration. -->
 <ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">All events &#183; NitteSync</ui:define>
     <ui:define name="content">
 
-        <h1>All events</h1>
+        <div class="page-head">
+            <div>
+                <p class="eyebrow">Admin</p>
+                <h1>All events</h1>
+                <p class="lede">The full board: every listing and every registration.</p>
+            </div>
+            <div class="page-count">
+                <strong>#{adminEventsBean.allEvents.size()}</strong>
+                <span>events on the board</span>
+            </div>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminEventsBean.allEvents}">
             There are no events in the system yet.
@@ -50,13 +61,19 @@
             </h:column>
 
             <h:column>
-                <f:facet name="header">Registrations</f:facet>
+                <f:facet name="header">Registered</f:facet>
                 #{event.registrationCount}
             </h:column>
 
         </h:dataTable>
 
-        <h2>All registrations</h2>
+        <div class="section-head section-head-spaced">
+            <div>
+                <p class="eyebrow">Sign-ups</p>
+                <h2>All registrations</h2>
+            </div>
+            <p class="muted">#{adminEventsBean.registrations.size()} total</p>
+        </div>
 
         <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminEventsBean.registrations}">
             No student has registered for an event yet.
@@ -74,7 +91,10 @@
 
             <h:column>
                 <f:facet name="header">Event</f:facet>
-                #{registration.eventTitle}
+                <h:link outcome="/event-details.xhtml" styleClass="link">
+                    <f:param name="eventId" value="#{registration.eventId}"/>
+                    #{registration.eventTitle}
+                </h:link>
             </h:column>
 
             <h:column>
