@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Public welcome page. It is the welcome-file of the application. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <section class="hero">
+            <h1>Welcome to NitteSync</h1>
+            <p>
+                NitteSync is the single place for campus events at Nitte.
+                Students discover events and register for them, clubs publish events,
+                and administrators approve what gets published.
+            </p>
+            <h:link outcome="/login.xhtml" value="Login to continue" styleClass="button"/>
+        </section>
+
+        <section class="cards">
+            <div class="card">
+                <h2>Students</h2>
+                <p>Browse the approved events, open an event to see the details and register with one click.</p>
+            </div>
+            <div class="card">
+                <h2>Clubs</h2>
+                <p>Create an event, keep it as a draft, edit it, and submit it for approval when it is ready.</p>
+            </div>
+            <div class="card">
+                <h2>Administrators</h2>
+                <p>Approve or reject submitted events and see every event and registration in one place.</p>
+            </div>
+        </section>
+
+    </ui:define>
+</ui:composition>
+</html>

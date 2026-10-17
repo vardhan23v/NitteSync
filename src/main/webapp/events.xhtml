@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Approved events. This is the list students browse and register from. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <h1>Upcoming events</h1>
+        <p class="muted">Only events approved by the administrator are shown here.</p>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty eventListBean.events}">
+            No approved events yet. Please check back later.
+        </h:panelGroup>
+
+        <div class="cards">
+            <ui:repeat value="#{eventListBean.events}" var="event">
+                <div class="card">
+                    <h3>#{event.title}</h3>
+                    <p class="muted">
+                        <h:outputText value="#{event.eventDate}">
+                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                        </h:outputText>
+                        &#183; #{event.venue}
+                    </p>
+                    <p>#{event.description}</p>
+                    <p class="muted">Organised by #{event.organizerName}
+                        &#183; #{event.registrationCount} registered</p>
+                    <h:link outcome="/event-details.xhtml" value="View details and register" styleClass="link">
+                        <f:param name="eventId" value="#{event.id}"/>
+                    </h:link>
+                </div>
+            </ui:repeat>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

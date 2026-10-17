@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!--
+  One page for both creating and editing an event:
+    event-form.xhtml            -> create
+    event-form.xhtml?eventId=3  -> edit, loadForEdit() fills the fields
+-->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="eventId" value="#{eventFormBean.eventId}"/>
+        <f:viewAction action="#{eventFormBean.loadForEdit}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h1>#{eventFormBean.editing ? 'Edit event' : 'Create a new event'}</h1>
+
+        <h:form id="eventForm">
+
+            <!-- Carries the id of the event being edited through the postback. -->
+            <h:inputHidden value="#{eventFormBean.eventId}"/>
+
+            <div class="field">
+                <h:outputLabel for="title" value="Title"/>
+                <h:inputText id="title" value="#{eventFormBean.title}" styleClass="input"
+                             required="true" requiredMessage="The title is required."
+                             validatorMessage="The title must be between 3 and 150 characters.">
+                    <f:validateLength minimum="3" maximum="150"/>
+                </h:inputText>
+                <h:message for="title" styleClass="field-error"/>
+            </div>
+
+            <div class="field">
+                <h:outputLabel for="description" value="Description"/>
+                <h:inputTextarea id="description" value="#{eventFormBean.description}"
+                                 styleClass="input" rows="4"/>
+                <h:message for="description" styleClass="field-error"/>
+            </div>
+
+            <div class="field">
+                <h:outputLabel for="venue" value="Venue"/>
+                <h:inputText id="venue" value="#{eventFormBean.venue}" styleClass="input"
+                             required="true" requiredMessage="The venue is required."
+                             validatorMessage="The venue must not be longer than 150 characters.">
+                    <f:validateLength minimum="1" maximum="150"/>
+                </h:inputText>
+                <h:message for="venue" styleClass="field-error"/>
+            </div>
+
+            <div class="field">
+                <h:outputLabel for="eventDate" value="Event date"/>
+                <h:inputText id="eventDate" value="#{eventFormBean.eventDate}" styleClass="input"
+                             required="true" requiredMessage="The event date is required.">
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                </h:inputText>
+                <span class="hint-text">Format: yyyy-mm-dd, for example 2027-01-22</span>
+                <h:message for="eventDate" styleClass="field-error"/>
+            </div>
+
+            <h:commandButton value="Save" action="#{eventFormBean.save}" styleClass="button"/>
+            <h:commandButton value="Cancel" action="#{eventFormBean.cancel}"
+                             styleClass="button button-secondary" immediate="true"/>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

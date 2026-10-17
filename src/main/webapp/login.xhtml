@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Login page. The form is bound to the loginBean backing bean. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <div class="login-box">
+            <h1>Login</h1>
+
+            <h:form id="loginForm">
+                <div class="field">
+                    <h:outputLabel for="email" value="Email"/>
+                    <h:inputText id="email" value="#{loginBean.email}" styleClass="input"
+                                 required="true" requiredMessage="Email is required."/>
+                    <h:message for="email" styleClass="field-error"/>
+                </div>
+
+                <div class="field">
+                    <h:outputLabel for="password" value="Password"/>
+                    <h:inputSecret id="password" value="#{loginBean.password}" styleClass="input"
+                                   required="true" requiredMessage="Password is required."/>
+                    <h:message for="password" styleClass="field-error"/>
+                </div>
+
+                <h:commandButton value="Login" action="#{loginBean.login}" styleClass="button"/>
+            </h:form>
+
+            <div class="hint">
+                <p><strong>Demo accounts</strong> - the password for all of them is <code>password</code></p>
+                <ul>
+                    <li>Administrator: admin@nitte.edu.in</li>
+                    <li>Club: coding.club@nitte.edu.in</li>
+                    <li>Student: rahul@nitte.edu.in</li>
+                </ul>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

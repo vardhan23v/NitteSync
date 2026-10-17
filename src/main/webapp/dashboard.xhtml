@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Dashboard: the numbers and the next events, per role. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <h1>Dashboard</h1>
+        <p class="muted">Logged in as <strong>#{loginBean.currentUser.name}</strong>
+            (#{loginBean.currentUser.role})</p>
+
+        <!-- Student summary -->
+        <h:panelGroup rendered="#{loginBean.student}">
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-number">#{dashboardBean.myRegistrationCount}</span>
+                    <span class="stat-label">Events you registered for</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">#{dashboardBean.upcomingEventCount}</span>
+                    <span class="stat-label">Upcoming events shown below</span>
+                </div>
+            </div>
+            <p><h:link outcome="/events.xhtml" value="Browse all events" styleClass="button"/></p>
+        </h:panelGroup>
+
+        <!-- Club summary -->
+        <h:panelGroup rendered="#{loginBean.club}">
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-number">#{dashboardBean.myEventCount}</span>
+                    <span class="stat-label">Events created by your club</span>
+                </div>
+            </div>
+            <p>
+                <h:link outcome="/club-events.xhtml" value="Manage my events" styleClass="button"/>
+                <h:link outcome="/event-form.xhtml" value="Create a new event" styleClass="button button-secondary"/>
+            </p>
+        </h:panelGroup>
+
+        <!-- Administrator summary -->
+        <h:panelGroup rendered="#{loginBean.admin}">
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-number">#{dashboardBean.pendingEventCount}</span>
+                    <span class="stat-label">Events waiting for approval</span>
+                </div>
+            </div>
+            <p>
+                <h:link outcome="/admin-approval.xhtml" value="Review approvals" styleClass="button"/>
+                <h:link outcome="/admin-events.xhtml" value="All events and registrations" styleClass="button button-secondary"/>
+            </p>
+        </h:panelGroup>
+
+        <h2>Upcoming events</h2>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty dashboardBean.upcomingEvents}">
+            There are no approved events yet. Please check back later.
+        </h:panelGroup>
+
+        <div class="cards">
+            <ui:repeat value="#{dashboardBean.upcomingEvents}" var="event">
+                <div class="card">
+                    <h3>#{event.title}</h3>
+                    <p class="muted">
+                        <h:outputText value="#{event.eventDate}">
+                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                        </h:outputText>
+                        &#183; #{event.venue}
+                    </p>
+                    <p>#{event.description}</p>
+                    <h:link outcome="/event-details.xhtml" value="View details" styleClass="link">
+                        <f:param name="eventId" value="#{event.id}"/>
+                    </h:link>
+                </div>
+            </ui:repeat>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!--
+  Event details.
+
+  The page is opened as event-details.xhtml?eventId=3:
+    <f:viewParam>  reads the eventId parameter from the URL into the bean
+    <f:viewAction> calls load() once, after the parameter has been set
+-->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="eventId" value="#{eventDetailsBean.eventId}"/>
+        <!-- onPostback="true" reloads the event after a click as well, so the page
+             always renders complete data instead of an empty shell. -->
+        <f:viewAction action="#{eventDetailsBean.load}" onPostback="true"/>
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h:panelGroup rendered="#{empty eventDetailsBean.event}">
+            <h1>Event details</h1>
+            <p class="empty">The event could not be loaded.</p>
+            <h:link outcome="/events.xhtml" value="Back to events" styleClass="button"/>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty eventDetailsBean.event}">
+            <h1>#{eventDetailsBean.event.title}</h1>
+
+            <div class="detail-box">
+                <dl>
+                    <dt>Date</dt>
+                    <dd>
+                        <h:outputText value="#{eventDetailsBean.event.eventDate}">
+                            <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                        </h:outputText>
+                    </dd>
+
+                    <dt>Venue</dt>
+                    <dd>#{eventDetailsBean.event.venue}</dd>
+
+                    <dt>Organised by</dt>
+                    <dd>#{eventDetailsBean.event.organizerName}</dd>
+
+                    <dt>Status</dt>
+                    <dd><h:outputText value="#{eventDetailsBean.event.status}"
+                                      styleClass="badge #{eventDetailsBean.event.status}"/></dd>
+
+                    <dt>Registrations</dt>
+                    <dd>#{eventDetailsBean.event.registrationCount}</dd>
+
+                    <dt>Description</dt>
+                    <dd>#{eventDetailsBean.event.description}</dd>
+                </dl>
+</div>
+        </h:panelGroup>
+
+        <!--
+          The registration form sits OUTSIDE the block above on purpose.
+          On a postback JSF decides which components exist before the view action
+          has loaded the event, so a form nested inside "the event is loaded"
+          could never call register(). This form only depends on the role of the
+          logged-in user, which is known on every request.
+        -->
+        <h:panelGroup rendered="#{loginBean.student}">
+            <h:form>
+                <!-- A form posts to the page without its query string, so the event id
+                     is carried back in a hidden field and register() knows which event
+                     is meant. -->
+                <h:inputHidden value="#{eventDetailsBean.eventId}"/>
+                <h:commandButton value="Register for this event"
+                                 action="#{eventDetailsBean.register}"
+                                 styleClass="button"
+                                 rendered="#{not eventDetailsBean.alreadyRegistered}"/>
+            </h:form>
+            <h:panelGroup layout="block" styleClass="alert alert-info"
+                          rendered="#{eventDetailsBean.alreadyRegistered}">
+                You are already registered for this event.
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <h:panelGroup layout="block" styleClass="muted"
+                      rendered="#{loginBean.club or loginBean.admin}">
+            Only student accounts can register for events.
+        </h:panelGroup>
+
+        <p><h:link outcome="/events.xhtml" value="Back to events" styleClass="link"/></p>
+
+    </ui:define>
+</ui:composition>
+</html>

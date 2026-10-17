@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Events waiting for the administrator's decision. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <h1>Events waiting for approval</h1>
+        <p class="muted">Approving an event makes it visible to every student.</p>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminApprovalBean.pendingEvents}">
+            No events are waiting for approval.
+        </h:panelGroup>
+
+        <h:form rendered="#{not empty adminApprovalBean.pendingEvents}">
+            <h:dataTable value="#{adminApprovalBean.pendingEvents}" var="event"
+                         styleClass="table" headerClass="table-header" rowClasses="table-row">
+
+                <h:column>
+                    <f:facet name="header">Event</f:facet>
+                    <h:link outcome="/event-details.xhtml" value="#{event.title}" styleClass="link">
+                        <f:param name="eventId" value="#{event.id}"/>
+                    </h:link>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Club</f:facet>
+                    #{event.organizerName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    <h:outputText value="#{event.eventDate}">
+                        <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Venue</f:facet>
+                    #{event.venue}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Submitted on</f:facet>
+                    <h:outputText value="#{event.createdAt}">
+                        <f:convertDateTime type="localDateTime" pattern="dd MMM yyyy, HH:mm"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Decision</f:facet>
+                    <h:commandButton value="Approve" styleClass="button button-small"
+                                     action="#{adminApprovalBean.approve(event.id)}"/>
+                    <h:commandButton value="Reject" styleClass="button button-small button-danger"
+                                     action="#{adminApprovalBean.reject(event.id)}"/>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

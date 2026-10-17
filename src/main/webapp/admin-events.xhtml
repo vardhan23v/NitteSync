@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- Administrator overview: every event and every registration. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <h1>All events</h1>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminEventsBean.allEvents}">
+            There are no events in the system yet.
+        </h:panelGroup>
+
+        <h:dataTable value="#{adminEventsBean.allEvents}" var="event"
+                     styleClass="table" headerClass="table-header" rowClasses="table-row"
+                     rendered="#{not empty adminEventsBean.allEvents}">
+
+            <h:column>
+                <f:facet name="header">Event</f:facet>
+                <h:link outcome="/event-details.xhtml" value="#{event.title}" styleClass="link">
+                    <f:param name="eventId" value="#{event.id}"/>
+                </h:link>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Club</f:facet>
+                #{event.organizerName}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Date</f:facet>
+                <h:outputText value="#{event.eventDate}">
+                    <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Venue</f:facet>
+                #{event.venue}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                <h:outputText value="#{event.status}" styleClass="badge #{event.status}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Registrations</f:facet>
+                #{event.registrationCount}
+            </h:column>
+
+        </h:dataTable>
+
+        <h1>All registrations</h1>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty adminEventsBean.registrations}">
+            No student has registered for an event yet.
+        </h:panelGroup>
+
+        <h:dataTable value="#{adminEventsBean.registrations}" var="registration"
+                     styleClass="table" headerClass="table-header" rowClasses="table-row"
+                     rendered="#{not empty adminEventsBean.registrations}">
+
+            <h:column>
+                <f:facet name="header">Student</f:facet>
+                #{registration.studentName}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Event</f:facet>
+                #{registration.eventTitle}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Event date</f:facet>
+                <h:outputText value="#{registration.eventDate}">
+                    <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Venue</f:facet>
+                #{registration.venue}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Registered on</f:facet>
+                <h:outputText value="#{registration.registrationDate}">
+                    <f:convertDateTime type="localDateTime" pattern="dd MMM yyyy, HH:mm"/>
+                </h:outputText>
+            </h:column>
+
+        </h:dataTable>
+
+    </ui:define>
+</ui:composition>
+</html>

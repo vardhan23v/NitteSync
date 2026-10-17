@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<!-- The events created by the logged-in club, with the actions a club may run. -->
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+
+        <h1>My events</h1>
+        <p class="muted">
+            A new event starts as a draft. Submit it for approval when it is ready;
+            an approved event can no longer be edited or deleted.
+        </p>
+
+        <p><h:link outcome="/event-form.xhtml" value="Create a new event" styleClass="button"/></p>
+
+        <h:panelGroup layout="block" styleClass="empty" rendered="#{empty clubEventBean.events}">
+            Your club has not created any event yet.
+        </h:panelGroup>
+
+        <h:form rendered="#{not empty clubEventBean.events}">
+            <h:dataTable value="#{clubEventBean.events}" var="event"
+                         styleClass="table" headerClass="table-header" rowClasses="table-row">
+
+                <h:column>
+                    <f:facet name="header">Event</f:facet>
+                    <h:link outcome="/event-details.xhtml" value="#{event.title}" styleClass="link">
+                        <f:param name="eventId" value="#{event.id}"/>
+                    </h:link>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    <h:outputText value="#{event.eventDate}">
+                        <f:convertDateTime type="localDate" pattern="dd MMM yyyy"/>
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Venue</f:facet>
+                    #{event.venue}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    <h:outputText value="#{event.status}" styleClass="badge #{event.status}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Registrations</f:facet>
+                    #{event.registrationCount}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+
+                    <h:link outcome="/event-form.xhtml" value="Edit" styleClass="link"
+                            rendered="#{clubEventBean.canEdit(event)}">
+                        <f:param name="eventId" value="#{event.id}"/>
+                    </h:link>
+
+                    <h:commandButton value="Submit for approval" styleClass="button button-small"
+                                     action="#{clubEventBean.submit(event.id)}"
+                                     rendered="#{clubEventBean.canSubmit(event)}"/>
+
+                    <h:commandButton value="Delete" styleClass="button button-small button-danger"
+                                     action="#{clubEventBean.delete(event.id)}"
+                                     rendered="#{clubEventBean.canEdit(event)}"
+                                     onclick="return confirm('Delete this event?');"/>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>
