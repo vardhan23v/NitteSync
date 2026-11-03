@@ -1,19 +1,38 @@
 # NitteSync
 
-![Java 21](https://img.shields.io/badge/Java-21-a84e00?style=flat-square&logo=openjdk&logoColor=white)
-![Jakarta Faces 4.0](https://img.shields.io/badge/Jakarta%20Faces-4.0-7a3fb0?style=flat-square)
-![CDI](https://img.shields.io/badge/CDI-Weld%205.1.7-7a3fb0?style=flat-square)
-![Tomcat 10.1](https://img.shields.io/badge/Tomcat-10.1-a84e00?style=flat-square&logo=apachetomcat&logoColor=white)
-![MySQL 8](https://img.shields.io/badge/MySQL-8-33791f?style=flat-square&logo=mysql&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-3.8%2B-7a3fb0?style=flat-square&logo=apachemaven&logoColor=white)
-![No JavaScript frameworks](https://img.shields.io/badge/UI-no%20JS%20frameworks-6e5473?style=flat-square)
-[![Last commit](https://img.shields.io/github/last-commit/vardhan23v/NitteSync?style=flat-square&color=a84e00)](https://github.com/vardhan23v/NitteSync/commits/main)
+![Java 21](https://img.shields.io/badge/Java-21-a84e00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Jakarta Faces 4.0](https://img.shields.io/badge/Jakarta%20Faces-4.0-7a3fb0?style=for-the-badge)
+![CDI](https://img.shields.io/badge/CDI-Weld%205.1.7-7a3fb0?style=for-the-badge)
+![Tomcat 10.1](https://img.shields.io/badge/Tomcat-10.1-a84e00?style=for-the-badge&logo=apachetomcat&logoColor=white)
+![MySQL 8](https://img.shields.io/badge/MySQL-8-33791f?style=for-the-badge&logo=mysql&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.8%2B-7a3fb0?style=for-the-badge&logo=apachemaven&logoColor=white)
+![No JavaScript frameworks](https://img.shields.io/badge/UI-no%20JS%20frameworks-6e5473?style=for-the-badge)
+[![Last commit](https://img.shields.io/github/last-commit/vardhan23v/NitteSync?style=for-the-badge&color=a84e00)](https://github.com/vardhan23v/NitteSync/commits/main)
 
 Campus event management platform for Nitte — a Java and Spring Framework Lab
 mini-project built with **Jakarta Faces 4.0 (JSF), JDBC and MySQL**.
 
 Students browse and register for events, clubs create and submit events, and
 administrators approve or reject them.
+
+---
+
+## Quick start (macOS, terminal only)
+
+```bash
+brew install openjdk@21 maven mysql tomcat@10
+brew services start mysql
+mysql -u root < src/main/resources/schema.sql
+mysql -u root < src/main/resources/sample-data.sql
+
+export JAVA_HOME=/opt/homebrew/opt/openjdk@21
+mvn clean package
+cp target/nittesync.war /opt/homebrew/opt/tomcat@10/libexec/webapps/
+/opt/homebrew/opt/tomcat@10/libexec/bin/startup.sh
+```
+
+Open **http://localhost:8080/nittesync/** and log in with
+`admin@nitte.edu.in` / `password`. Stop Tomcat with `bin/shutdown.sh`.
 
 ---
 
