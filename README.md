@@ -5,7 +5,6 @@
 ![CDI](https://img.shields.io/badge/CDI-Weld%205.1.7-7a3fb0?style=for-the-badge)
 ![Tomcat 10.1](https://img.shields.io/badge/Tomcat-10.1-a84e00?style=for-the-badge&logo=apachetomcat&logoColor=white)
 ![MySQL 8](https://img.shields.io/badge/MySQL-8-33791f?style=for-the-badge&logo=mysql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ed?style=for-the-badge&logo=docker&logoColor=white)
 ![JUnit 5](https://img.shields.io/badge/JUnit-5.10.2-25a162?style=for-the-badge&logo=junit5&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-3.8%2B-7a3fb0?style=for-the-badge&logo=apachemaven&logoColor=white)
 ![No JavaScript frameworks](https://img.shields.io/badge/UI-no%20JS%20frameworks-6e5473?style=for-the-badge)
@@ -16,19 +15,6 @@ mini-project built with **Jakarta Faces 4.0 (JSF), JDBC and MySQL**.
 
 Students browse and register for events, clubs create and submit events, and
 administrators approve or reject them.
-
----
-
-## Quick start with Docker (cross-platform)
-
-The fastest way to spin up the entire application stack including MySQL 8 with pre-loaded sample data:
-
-```bash
-docker compose up --build
-```
-
-Open **http://localhost:8080/nittesync/** and log in with
-`admin@nitte.edu.in` / `password`. To stop the containers, press `Ctrl+C` or run `docker compose down`.
 
 ---
 
@@ -64,7 +50,6 @@ Open **http://localhost:8080/nittesync/** and log in with
 | MySQL Connector/J | 8.4.0 | JDBC driver |
 | Apache Tomcat | 10.1.x | Servlet 6.0 container |
 | JUnit | 5.10.2 | Unit and service validation tests |
-| Docker | Compose v2 | Multi-stage container deployment |
 | Maven | 3.8+ | build |
 
 **Jakarta Faces 4.0 removed `@ManagedBean`**, so every backing bean is a CDI
@@ -78,8 +63,6 @@ Weld ships inside the WAR and `WEB-INF/beans.xml` exists.
 ```
 NitteSync/
 ├── pom.xml
-├── Dockerfile
-├── docker-compose.yml
 ├── README.md
 ├── src/
 │   ├── main/
