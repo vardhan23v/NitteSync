@@ -59,14 +59,22 @@ public final class DBConnection {
         if (configError != null) {
             throw new SQLException(configError);
         }
-        String url = PROPERTIES.getProperty("db.url", "");
-        String user = PROPERTIES.getProperty("db.user", "");
-        String password = PROPERTIES.getProperty("db.password", "");
+        String envUrl = System.getenv("DB_URL");
+        String envUser = System.getenv("DB_USER");
+        String envPassword = System.getenv("DB_PASSWORD");
+
+        String url = (envUrl != null && !envUrl.isBlank()) ? envUrl : PROPERTIES.getProperty("db.url", "");
+        String user = (envUser != null && !envUser.isBlank()) ? envUser : PROPERTIES.getProperty("db.user", "");
+        String password = (envPassword != null) ? envPassword : PROPERTIES.getProperty("db.password", "");
         return DriverManager.getConnection(url, user, password);
     }
 
     /** The JDBC URL currently configured - used by the connection test. */
     public static String getUrl() {
+        String envUrl = System.getenv("DB_URL");
+        if (envUrl != null && !envUrl.isBlank()) {
+            return envUrl;
+        }
         return PROPERTIES.getProperty("db.url", "(not configured)");
     }
 }
