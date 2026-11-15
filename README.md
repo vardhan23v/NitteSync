@@ -5,6 +5,8 @@
 ![CDI](https://img.shields.io/badge/CDI-Weld%205.1.7-7a3fb0?style=for-the-badge)
 ![Tomcat 10.1](https://img.shields.io/badge/Tomcat-10.1-a84e00?style=for-the-badge&logo=apachetomcat&logoColor=white)
 ![MySQL 8](https://img.shields.io/badge/MySQL-8-33791f?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ed?style=for-the-badge&logo=docker&logoColor=white)
+![JUnit 5](https://img.shields.io/badge/JUnit-5.10.2-25a162?style=for-the-badge&logo=junit5&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-3.8%2B-7a3fb0?style=for-the-badge&logo=apachemaven&logoColor=white)
 ![No JavaScript frameworks](https://img.shields.io/badge/UI-no%20JS%20frameworks-6e5473?style=for-the-badge)
 [![Last commit](https://img.shields.io/github/last-commit/vardhan23v/NitteSync?style=for-the-badge&color=a84e00)](https://github.com/vardhan23v/NitteSync/commits/main)
@@ -14,6 +16,19 @@ mini-project built with **Jakarta Faces 4.0 (JSF), JDBC and MySQL**.
 
 Students browse and register for events, clubs create and submit events, and
 administrators approve or reject them.
+
+---
+
+## Quick start with Docker (cross-platform)
+
+The fastest way to spin up the entire application stack including MySQL 8 with pre-loaded sample data:
+
+```bash
+docker compose up --build
+```
+
+Open **http://localhost:8080/nittesync/** and log in with
+`admin@nitte.edu.in` / `password`. To stop the containers, press `Ctrl+C` or run `docker compose down`.
 
 ---
 
@@ -48,6 +63,8 @@ Open **http://localhost:8080/nittesync/** and log in with
 | Servlet API | 6.0.0 | provided by Tomcat |
 | MySQL Connector/J | 8.4.0 | JDBC driver |
 | Apache Tomcat | 10.1.x | Servlet 6.0 container |
+| JUnit | 5.10.2 | Unit and service validation tests |
+| Docker | Compose v2 | Multi-stage container deployment |
 | Maven | 3.8+ | build |
 
 **Jakarta Faces 4.0 removed `@ManagedBean`**, so every backing bean is a CDI
@@ -61,25 +78,33 @@ Weld ships inside the WAR and `WEB-INF/beans.xml` exists.
 ```
 NitteSync/
 ├── pom.xml
+├── Dockerfile
+├── docker-compose.yml
 ├── README.md
-└── src/main/
-    ├── java/com/nittesync/
-    │   ├── model/      User, Event, Registration
-    │   ├── dao/        UserDAO, EventDAO, RegistrationDAO        (JDBC)
-    │   ├── service/    AuthService, EventService, RegistrationService (rules)
-    │   ├── bean/       JSF backing beans (@Named), including RegisterBean
-    │   ├── filter/     AuthFilter (login + role gate)
-    │   └── util/       DBConnection, PasswordUtil, SessionUtil, FacesUtil,
-    │                   DataAccessException, TestConnection
-    ├── resources/      db.properties, schema.sql, sample-data.sql
-    └── webapp/
-        ├── index.xhtml, login.xhtml, register.xhtml, dashboard.xhtml,
-        │   events.xhtml, event-details.xhtml, my-registrations.xhtml,
-        │   club-events.xhtml, event-form.xhtml, admin-approval.xhtml,
-        │   admin-events.xhtml
-        ├── resources/css/style.css
-        ├── resources/img/favicon.svg, favicon.png
-        └── WEB-INF/    web.xml, beans.xml, faces-config.xml, templates/layout.xhtml
+├── src/
+│   ├── main/
+│   │   ├── java/com/nittesync/
+│   │   │   ├── model/      User, Event, Registration
+│   │   │   ├── dao/        UserDAO, EventDAO, RegistrationDAO        (JDBC)
+│   │   │   ├── service/    AuthService, EventService, RegistrationService (rules)
+│   │   │   ├── bean/       JSF backing beans (@Named), including RegisterBean
+│   │   │   ├── filter/     AuthFilter (login + role gate)
+│   │   │   └── util/       DBConnection, PasswordUtil, SessionUtil, FacesUtil,
+│   │   │                   DataAccessException, TestConnection
+│   │   ├── resources/      db.properties, db.properties.example, schema.sql, sample-data.sql
+│   │   └── webapp/
+│   │       ├── index.xhtml, login.xhtml, register.xhtml, dashboard.xhtml,
+│   │       │   events.xhtml, event-details.xhtml, my-registrations.xhtml,
+│   │       │   club-events.xhtml, event-form.xhtml, admin-approval.xhtml,
+│   │       │   admin-events.xhtml
+│   │       ├── resources/css/style.css
+│   │       ├── resources/img/favicon.svg, favicon.png
+│   │       └── WEB-INF/    web.xml, beans.xml, faces-config.xml, templates/layout.xhtml
+│   └── test/
+│       └── java/com/nittesync/
+│           ├── model/      UserTest, EventTest
+│           ├── service/    AuthServiceValidationTest, EventServiceValidationTest
+│           └── util/       PasswordUtilTest
 ```
 
 Layers: **XHTML page → backing bean → service → DAO → JDBC → MySQL**.
@@ -168,7 +193,23 @@ Then open **http://localhost:8080/nittesync/**
 
 ---
 
-## 5. Troubleshooting
+## 5. Running automated tests
+
+Run the test suite with Maven:
+
+```bash
+mvn test
+```
+
+The test suite executes via **JUnit 5 Jupiter** without requiring a live database:
+- **`PasswordUtilTest`** — verifies SHA-256 cryptographic hashing format (64-character lowercase hexadecimal), determinism, and case-insensitive whitespace-trimmed comparison.
+- **`UserTest` & `EventTest`** — verifies role constants (`STUDENT`, `CLUB`, `ADMIN`), event lifecycle stages (`DRAFT`, `PENDING`, `APPROVED`, `REJECTED`), and domain model integrity.
+- **`AuthServiceValidationTest`** — verifies input security checks: password minimum length constraints, name character limits, RFC email formatting regex, and disallowing administrative self-registration.
+- **`EventServiceValidationTest`** — verifies role authorization guards (only clubs may create/update/delete events), title/venue validation rules, and disallowing events scheduled in the past.
+
+---
+
+## 6. Troubleshooting
 
 | Symptom | Cause and fix |
 |---|---|
@@ -183,7 +224,7 @@ Then open **http://localhost:8080/nittesync/**
 
 ---
 
-## 6. What the application does
+## 7. What the application does
 
 * **Visitor** — create a student or club account from the Register page; the
   new account is signed in immediately. Administrators are provisioned, never
@@ -200,7 +241,7 @@ Editing an event puts it back to `DRAFT`. Students only ever see `APPROVED`
 events. Every role rule is checked on the server (services and `AuthFilter`),
 not only by hiding buttons.
 
-## 7. Not implemented
+## 8. Not implemented
 
 Club-account vetting (anyone can create a club account, but every event still
 needs administrator approval), e-mail verification, password reset, e-mail
