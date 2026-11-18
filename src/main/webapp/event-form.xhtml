@@ -75,11 +75,11 @@
                     <h:outputLabel for="eventDate" value="Event date"/>
                     <h:inputText id="eventDate" value="#{eventFormBean.eventDate}" styleClass="input"
                                  required="true" requiredMessage="The event date is required."
-                                 p:aria-required="true"
+                                 p:type="date" p:aria-required="true"
                                  p:aria-describedby="eventForm:eventDateHint eventForm:eventDateError">
                         <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                     </h:inputText>
-                    <span class="hint-text" id="eventDateHint">Format: 2027-01-22 (year-month-day).</span>
+                    <span class="hint-text" id="eventDateHint">Pick a date from the calendar.</span>
                     <h:message for="eventDate" id="eventDateError" styleClass="field-error"/>
                 </div>
 
