@@ -21,6 +21,9 @@ public class AuthService {
     private static final Pattern EMAIL =
             Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$");
 
+    /** Only college addresses may sign up or log in. */
+    public static final String DOMAIN = "@nmamit.in";
+
     private final UserDAO userDAO = new UserDAO();
 
     /**
@@ -34,7 +37,8 @@ public class AuthService {
         }
 
         String trimmedEmail = email.trim();
-        if (trimmedEmail.isEmpty() || password.isEmpty()) {
+        if (trimmedEmail.isEmpty() || password.isEmpty()
+                || !trimmedEmail.toLowerCase(Locale.ROOT).endsWith(DOMAIN)) {
             return null;
         }
 
@@ -66,6 +70,9 @@ public class AuthService {
         }
         if (cleanEmail.isEmpty() || cleanEmail.length() > 150 || !EMAIL.matcher(cleanEmail).matches()) {
             throw new IllegalArgumentException("Enter a valid email address.");
+        }
+        if (!cleanEmail.endsWith(DOMAIN)) {
+            throw new IllegalArgumentException("Use your college email address ending in " + DOMAIN + ".");
         }
         if (password == null || password.length() < 8) {
             throw new IllegalArgumentException("Choose a password with at least 8 characters.");

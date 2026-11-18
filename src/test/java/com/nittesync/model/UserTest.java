@@ -23,7 +23,7 @@ class UserTest {
         User user = new User();
         user.setId(42);
         user.setName("Test Student");
-        user.setEmail("student@nitte.edu.in");
+        user.setEmail("student@nmamit.in");
         user.setPasswordHash("hash123");
         user.setRole(User.ROLE_STUDENT);
         LocalDateTime now = LocalDateTime.now();
@@ -31,7 +31,7 @@ class UserTest {
 
         assertEquals(42, user.getId());
         assertEquals("Test Student", user.getName());
-        assertEquals("student@nitte.edu.in", user.getEmail());
+        assertEquals("student@nmamit.in", user.getEmail());
         assertEquals("hash123", user.getPasswordHash());
         assertEquals(User.ROLE_STUDENT, user.getRole());
         assertEquals(now, user.getCreatedAt());

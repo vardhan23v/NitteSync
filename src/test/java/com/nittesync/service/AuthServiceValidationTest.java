@@ -24,21 +24,21 @@ class AuthServiceValidationTest {
     @DisplayName("login returns null immediately when credentials are null or blank")
     void testLoginWithNullOrBlankCredentials() {
         assertNull(authService.login(null, "password"));
-        assertNull(authService.login("user@nitte.edu.in", null));
+        assertNull(authService.login("user@nmamit.in", null));
         assertNull(authService.login("   ", "password"));
-        assertNull(authService.login("user@nitte.edu.in", ""));
+        assertNull(authService.login("user@nmamit.in", ""));
     }
 
     @Test
     @DisplayName("register rejects names shorter than 2 or longer than 100 characters")
     void testRegisterNameValidation() {
         IllegalArgumentException shortEx = assertThrows(IllegalArgumentException.class, () ->
-            authService.register("A", "test@nitte.edu.in", "password123", User.ROLE_STUDENT)
+            authService.register("A", "test@nmamit.in", "password123", User.ROLE_STUDENT)
         );
         assertTrue(shortEx.getMessage().contains("2 to 100 characters"));
 
         IllegalArgumentException longEx = assertThrows(IllegalArgumentException.class, () ->
-            authService.register("A".repeat(101), "test@nitte.edu.in", "password123", User.ROLE_STUDENT)
+            authService.register("A".repeat(101), "test@nmamit.in", "password123", User.ROLE_STUDENT)
         );
         assertTrue(longEx.getMessage().contains("2 to 100 characters"));
     }
@@ -53,11 +53,27 @@ class AuthServiceValidationTest {
         assertTrue(ex.getMessage().contains("valid email address"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"someone@gmail.com", "x@nitte.edu.in", "user@nmamit.in.evil.com"})
+    @DisplayName("register rejects emails outside the @nmamit.in domain")
+    void testRegisterRejectsOtherDomains(String email) {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            authService.register("John Doe", email, "password123", User.ROLE_STUDENT)
+        );
+        assertTrue(ex.getMessage().contains("@nmamit.in"));
+    }
+
+    @Test
+    @DisplayName("login returns null for emails outside the @nmamit.in domain")
+    void testLoginRejectsOtherDomains() {
+        assertNull(authService.login("admin@gmail.com", "password"));
+    }
+
     @Test
     @DisplayName("register rejects passwords with fewer than 8 characters")
     void testRegisterPasswordLength() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
-            authService.register("Valid Name", "valid@nitte.edu.in", "short", User.ROLE_STUDENT)
+            authService.register("Valid Name", "valid@nmamit.in", "short", User.ROLE_STUDENT)
         );
         assertTrue(ex.getMessage().contains("at least 8 characters"));
     }
@@ -66,12 +82,12 @@ class AuthServiceValidationTest {
     @DisplayName("register prevents self-registering as ADMIN or arbitrary role")
     void testRegisterDisallowsAdminRole() {
         IllegalArgumentException adminEx = assertThrows(IllegalArgumentException.class, () ->
-            authService.register("Valid Name", "valid@nitte.edu.in", "password123", User.ROLE_ADMIN)
+            authService.register("Valid Name", "valid@nmamit.in", "password123", User.ROLE_ADMIN)
         );
         assertTrue(adminEx.getMessage().contains("valid account type"));
 
         IllegalArgumentException arbitraryEx = assertThrows(IllegalArgumentException.class, () ->
-            authService.register("Valid Name", "valid@nitte.edu.in", "password123", "SUPERUSER")
+            authService.register("Valid Name", "valid@nmamit.in", "password123", "SUPERUSER")
         );
         assertTrue(arbitraryEx.getMessage().contains("valid account type"));
     }

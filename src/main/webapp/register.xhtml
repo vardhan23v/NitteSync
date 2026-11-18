@@ -55,11 +55,11 @@
                             <h:outputLabel for="email" value="Email"/>
                             <h:inputText id="email" value="#{registerBean.email}" styleClass="input"
                                          required="true" requiredMessage="Your email is required."
-                                         validatorMessage="Enter a valid email address."
-                                         p:type="email" p:autocomplete="email"
+                                         validatorMessage="Use your college email address ending in @nmamit.in."
+                                         p:type="email" p:autocomplete="email" p:placeholder="name@nmamit.in"
                                          p:aria-required="true"
                                          p:aria-describedby="registerForm:emailError">
-                                <f:validateRegex pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}"/>
+                                <f:validateRegex pattern="[^@\s]+@nmamit\.in"/>
                             </h:inputText>
                             <h:message for="email" id="emailError" styleClass="field-error"/>
                         </div>

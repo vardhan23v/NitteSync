@@ -42,7 +42,7 @@
                         <h:outputLabel for="email" value="Email"/>
                         <h:inputText id="email" value="#{loginBean.email}" styleClass="input"
                                      required="true" requiredMessage="Email is required."
-                                     p:type="email" p:autocomplete="username"
+                                     p:type="email" p:autocomplete="username" p:placeholder="name@nmamit.in"
                                      p:aria-required="true"
                                      p:aria-describedby="loginForm:emailError"/>
                         <h:message for="email" id="emailError" styleClass="field-error"/>
@@ -69,9 +69,9 @@
                 <hr class="auth-divider"/>
                 <p class="eyebrow">Demo access</p>
                 <ul class="demo-list">
-                    <li><span class="demo-role">Administrator</span><code>admin@nitte.edu.in</code></li>
-                    <li><span class="demo-role">Club</span><code>coding.club@nitte.edu.in</code></li>
-                    <li><span class="demo-role">Student</span><code>rahul@nitte.edu.in</code></li>
+                    <li><span class="demo-role">Administrator</span><code>admin@nmamit.in</code></li>
+                    <li><span class="demo-role">Club</span><code>coding.club@nmamit.in</code></li>
+                    <li><span class="demo-role">Student</span><code>rahul@nmamit.in</code></li>
                 </ul>
                 <p class="hint-text">The password for every demo account is <code>password</code>.</p>
             </div>

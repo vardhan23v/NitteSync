@@ -33,7 +33,7 @@ cp target/nittesync.war /opt/homebrew/opt/tomcat@10/libexec/webapps/
 ```
 
 Open **http://localhost:8080/nittesync/** and log in with
-`admin@nitte.edu.in` / `password`. Stop Tomcat with `bin/shutdown.sh`.
+`admin@nmamit.in` / `password`. Stop Tomcat with `bin/shutdown.sh`.
 
 ---
 
@@ -168,11 +168,11 @@ Then open **http://localhost:8080/nittesync/**
 
 | Role | Email | Password |
 |---|---|---|
-| Administrator | admin@nitte.edu.in | password |
-| Club | coding.club@nitte.edu.in | password |
-| Club | cultural.club@nitte.edu.in | password |
-| Student | rahul@nitte.edu.in | password |
-| Student | ananya@nitte.edu.in | password |
+| Administrator | admin@nmamit.in | password |
+| Club | coding.club@nmamit.in | password |
+| Club | cultural.club@nmamit.in | password |
+| Student | rahul@nmamit.in | password |
+| Student | ananya@nmamit.in | password |
 
 ---
 

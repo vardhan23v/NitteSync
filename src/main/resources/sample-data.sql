@@ -22,11 +22,11 @@ ALTER TABLE registrations AUTO_INCREMENT = 1;
 
 -- password_hash below = SHA-256("password")
 INSERT INTO users (name, email, password_hash, role) VALUES
-('Admin User',    'admin@nitte.edu.in',         '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ADMIN'),
-('Coding Club',   'coding.club@nitte.edu.in',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLUB'),
-('Cultural Club', 'cultural.club@nitte.edu.in', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLUB'),
-('Rahul Shetty',  'rahul@nitte.edu.in',         '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'STUDENT'),
-('Ananya Rao',    'ananya@nitte.edu.in',        '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'STUDENT');
+('Admin User',    'admin@nmamit.in',         '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'ADMIN'),
+('Coding Club',   'coding.club@nmamit.in',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLUB'),
+('Cultural Club', 'cultural.club@nmamit.in', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLUB'),
+('Rahul Shetty',  'rahul@nmamit.in',         '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'STUDENT'),
+('Ananya Rao',    'ananya@nmamit.in',        '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'STUDENT');
 
 INSERT INTO events (title, description, venue, event_date, organizer_id, status) VALUES
 ('Hackathon 2027',
