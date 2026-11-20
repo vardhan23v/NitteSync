@@ -37,6 +37,22 @@ Open **http://localhost:8080/nittesync/** and log in with
 
 ---
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Home page](docs/screenshots/home.png)<br>**Home page** | ![Login page](docs/screenshots/login.png)<br>**Login page** |
+| ![Account registration](docs/screenshots/register.png)<br>**Account registration** | ![Approved events seen by a student](docs/screenshots/events.png)<br>**Approved events seen by a student** |
+| ![Events registered by a student](docs/screenshots/my-registrations.png)<br>**Events registered by a student** | ![Club view of its own events and their status](docs/screenshots/club-events.png)<br>**Club view of its own events and their status** |
+| ![Club creating a new event](docs/screenshots/event-form.png)<br>**Club creating a new event** | ![Administrator approval queue](docs/screenshots/admin-approval.png)<br>**Administrator approval queue** |
+| ![Administrator view of all events and registrations](docs/screenshots/admin-events.png)<br>**Administrator view of all events and registrations** | |
+
+### Event status lifecycle
+
+![Event status lifecycle: DRAFT to PENDING to APPROVED or REJECTED](docs/event-lifecycle.png)
+
+---
+
 ## 1. Technology stack
 
 | Component | Version | Note |
