@@ -247,3 +247,16 @@ needs administrator approval), e-mail verification, password reset, e-mail
 notification, file uploads, event capacity limits, cancelling a registration,
 search, pagination, OAuth/JWT, Spring, Hibernate/JPA. All out of scope for the
 lab project.
+
+---
+
+## 9. Known limitations and design decisions
+
+| Area | Decision | Reason |
+|---|---|---|
+| Password hashing | SHA-256 (hex) | Keeps the project free of extra libraries; a real app would use BCrypt or Argon2 |
+| Email domain | `@nmamit.in` only | Restricts sign-ups to Nitte campus users; enforced server-side in `AuthService` |
+| No connection pool | `DriverManager` per request | Acceptable for a lab project; a production app would use a `DataSource` with HikariCP or Tomcat DBCP |
+| Session management | `HttpSession` via `SessionUtil` | Straightforward for a Servlet/JSF stack; no JWT or Spring Security needed at this scale |
+| No CSRF tokens | JSF `ViewState` only | JSF's built-in `javax.faces.ViewState` hidden field provides basic replay protection |
+| Single WAR | All layers in one module | Appropriate for a small lab project; a larger system would split into separate Maven modules |
